@@ -9,12 +9,12 @@ from rest_framework.permissions import AllowAny
 def services(request):
     return Response({
         "services": [
-            {"id": 1, "title": "Cleaning", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.07%20PM.jpeg", "is_vib": True},
-            {"id": 2, "title": "Plumbing", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.06%20PM(1).jpeg", "is_vib": False},
-            {"id": 3, "title": "Electrical", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.06%20PM.jpeg", "is_vib": True},
-            {"id": 1, "title": "Cleaning", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.05%20PM.jpeg", "is_vib": True},
-            {"id": 2, "title": "Plumbing", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.05%20PM(1).jpeg", "is_vib": False},
-            {"id": 3, "title": "Electrical", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.04%20PM(2).jpeg", "is_vib": True}
+            {"id": 1, "title": "Cleaning", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True},
+            {"id": 2, "title": "Plumbing", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": False},
+            {"id": 3, "title": "Electrical", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True},
+            {"id": 1, "title": "Cleaning", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True},
+            {"id": 2, "title": "Plumbing", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": False},
+            {"id": 3, "title": "Electrical", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True}
         ]
     })
 
@@ -25,9 +25,9 @@ def services(request):
 def offers(request):
     return Response({
         "offers": [
-            {"image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.18.23%20PM(1).jpeg"},
-            {"image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.18.23%20PM(2).jpeg"},
-            {"image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.18.23%20PM.jpeg"}
+            {"image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw"},
+            {"image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw"},
+            {"image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw"}
         ]
     })
 
