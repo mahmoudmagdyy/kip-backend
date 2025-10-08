@@ -86,6 +86,20 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+REST_FRAMEWORK = {
+    
+    'DEFAULT_AUTHENTICATION_CLASSES': ( 
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'EXCEPTION_HANDLER': 'utils.error_view.custom_exception_handler'
+}
+SIMPLE_JWT={
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=36500),  # ~100 years (effectively never expires)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=36500),  # ~100 years (effectively never expires)
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+}
 
 
 # Password validation
@@ -105,6 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 
 # Internationalization
