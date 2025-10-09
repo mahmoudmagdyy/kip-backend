@@ -105,7 +105,7 @@ def register(request):
     data = request.data
     serializer = SignUpSerializer(data=data)
     if not serializer.is_valid():
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response("all fields required ,and password should be 8 or more character", status=status.HTTP_400_BAD_REQUEST)
 
     if User.objects.filter(username=data['phone']).exists():
         return Response({"success": 'Email is aleady exist!'}, status=status.HTTP_400_BAD_REQUEST)
