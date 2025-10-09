@@ -8,7 +8,7 @@ class SignUpSerializer(serializers.Serializer):
     first_name = serializers.CharField(allow_blank=False, required=True)
     last_name = serializers.CharField(allow_blank=False, required=True)
     phone = serializers.CharField(min_length=8, allow_blank=False, required=True)
-    password = serializers.CharField(min_length=8, allow_blank=False, required=True, write_only=True)
+    password = serializers.CharField(allow_blank=False, required=True, write_only=True)
     gender = serializers.ChoiceField(choices=[('male','male'),('female','female'),('other','other')], required=False)
     country = serializers.CharField(required=False, allow_blank=True)
         
