@@ -24,7 +24,7 @@ def services(request):
           "description_ar": "تقديم استشارات قانونية مهنية في القضايا المدنية والجنائية.",
           "description_en": "Providing professional legal advice in civil and criminal matters.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 102,
@@ -33,7 +33,7 @@ def services(request):
           "description_ar": "تمثيل قانوني أمام الجهات الحكومية والهيئات المختصة.",
           "description_en": "Legal representation before governmental bodies and competent authorities.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 103,
@@ -42,7 +42,7 @@ def services(request):
           "description_ar": "صياغة ومراجعة العقود والمستندات القانونية بشكل دقيق.",
           "description_en": "Drafting and reviewing legal agreements and documents with precision.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 104,
@@ -51,7 +51,7 @@ def services(request):
           "description_ar": "إعداد عقود التأسيس واتفاقيات الشراكة بين الأطراف.",
           "description_en": "Preparing formation contracts and partnership agreements.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 105,
@@ -60,7 +60,7 @@ def services(request):
           "description_ar": "تقديم أعمال قانونية متنوعة واستشارات عامة.",
           "description_en": "Providing diverse legal tasks and general consultations.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 106,
@@ -69,7 +69,7 @@ def services(request):
           "description_ar": "تأسيس الشركات، استخراج التراخيص، التسجيل، وتنظيم الحوكمة.",
           "description_en": "Incorporation, licensing, registry, and governance setup for companies.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 107,
@@ -78,7 +78,7 @@ def services(request):
           "description_ar": "مستشارون يقدمون حلول قانونية مخصصة وفق حاجة العميل.",
           "description_en": "Consultants offering tailored legal solutions based on client needs.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         }
       ]
     },
@@ -97,7 +97,7 @@ def services(request):
           "description_ar": "تسجيل براءات الاختراع وحماية الحقوق الصناعية.",
           "description_en": "Registering patents and securing industrial property rights.",
           "icon": "https://www.svgrepo.com/svg/425985/globe-language",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 202,
@@ -106,7 +106,7 @@ def services(request):
           "description_ar": "تسجيل العلامات التجارية محلياً ودولياً.",
           "description_en": "Register trademarks locally and internationally.",
           "icon": "https://www.svgrepo.com/svg/425985/globe-language",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 203,
@@ -115,7 +115,7 @@ def services(request):
           "description_ar": "إدارة حقوق التأليف والنشر وحقوق الملكية الفكرية.",
           "description_en": "Managing copyrights and intellectual property rights.",
           "icon": "https://www.svgrepo.com/svg/425985/globe-language",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 204,
@@ -124,7 +124,7 @@ def services(request):
           "description_ar": "جمع حقوق النشر الدولية لصالح المؤلفين.",
           "description_en": "Collecting international copyright royalties for authors.",
           "icon": "https://www.svgrepo.com/svg/425985/globe-language",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 205,
@@ -133,7 +133,7 @@ def services(request):
           "description_ar": "دعم عملية النشر مع حقوق النشر الدولية.",
           "description_en": "Support for publishing with international copyright protections.",
           "icon": "https://www.svgrepo.com/svg/425985/globe-language",
-          "is_vib": false
+          "is_vib": False
         }
       ]
     },
@@ -152,7 +152,7 @@ def services(request):
           "description_ar": "ترجمة نصية وشفوية لنطاق واسع من المحتوى.",
           "description_en": "Textual and oral translation across a wide range of content.",
           "icon": "https://www.svgrepo.com/svg/455407/language-translation",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 302,
@@ -161,7 +161,7 @@ def services(request):
           "description_ar": "ترجمة في المجالات العامة والتخصصية بدقة.",
           "description_en": "Translation in general and specialized domains with accuracy.",
           "icon": "https://www.svgrepo.com/svg/455407/language-translation",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 303,
@@ -170,7 +170,7 @@ def services(request):
           "description_ar": "ترجمة المستندات القانونية والعقود بمهنية.",
           "description_en": "Translating legal documents and contracts with professionalism.",
           "icon": "https://www.svgrepo.com/svg/455407/language-translation",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 304,
@@ -179,7 +179,7 @@ def services(request):
           "description_ar": "خدمات التفسير الفوري للمؤتمرات والاجتماعات.",
           "description_en": "Real-time interpretation services for conferences and meetings.",
           "icon": "https://www.svgrepo.com/svg/455407/language-translation",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 305,
@@ -188,7 +188,7 @@ def services(request):
           "description_ar": "إدارة الصورة العامة والتواصل الإعلامي.",
           "description_en": "Managing public image and media communications.",
           "icon": "https://www.svgrepo.com/svg/455407/language-translation",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 306,
@@ -197,7 +197,7 @@ def services(request):
           "description_ar": "دعم المؤلفين في النشر والتنسيق وحقوقهم.",
           "description_en": "Supporting authors in publishing, formatting, and their rights.",
           "icon": "https://www.svgrepo.com/svg/455407/language-translation",
-          "is_vib": false
+          "is_vib": False
         }
       ]
     },
@@ -216,7 +216,7 @@ def services(request):
           "description_ar": "تنسيق وإدارة الأعمال الإدارية لرواد الأعمال.",
           "description_en": "Coordination and management of administrative tasks for entrepreneurs.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 402,
@@ -225,7 +225,7 @@ def services(request):
           "description_ar": "خدمات مخصصة لدعم أنشطة رجال الأعمال.",
           "description_en": "Tailored services to support businessmen’s operations.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 403,
@@ -234,7 +234,7 @@ def services(request):
           "description_ar": "تقديم استشارات وخطط تجارية احترافية.",
           "description_en": "Providing professional business consulting and strategies.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 404,
@@ -243,7 +243,7 @@ def services(request):
           "description_ar": "التعامل في سلع متنوعة وشبكات التوزيع.",
           "description_en": "Dealing in diverse goods and distribution networks.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 405,
@@ -252,7 +252,7 @@ def services(request):
           "description_ar": "مركز يقدم تسوية النزاعات وخدمات توافق بين الأطراف.",
           "description_en": "Center offering dispute resolution and harmony services between parties.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         }
       ]
     },
@@ -271,7 +271,7 @@ def services(request):
           "description_ar": "تحصيل الديون نيابة عن العملاء للأفراد والشركات.",
           "description_en": "Collecting debts on behalf of clients for individuals and companies.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 502,
@@ -280,7 +280,7 @@ def services(request):
           "description_ar": "مكتب متخصص في إدارة عمليات التحصيل.",
           "description_en": "An agency specialized in handling debt collection operations.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 503,
@@ -289,7 +289,7 @@ def services(request):
           "description_ar": "تحصيل المدفوعات المتعلقة بالمطالبات القانونية.",
           "description_en": "Collecting payments related to legal claims.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 504,
@@ -298,7 +298,7 @@ def services(request):
           "description_ar": "إرسال المبالغ المحصلة إلى العملاء.",
           "description_en": "Remitting collected amounts back to clients.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         }
       ]
     },
@@ -317,7 +317,7 @@ def services(request):
           "description_ar": "القضايا المتعلّقة بالعقارات وحقوق الملكية.",
           "description_en": "Disputes related to real estate and property rights.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 602,
@@ -326,7 +326,7 @@ def services(request):
           "description_ar": "نزاعات متعلقة بالملكية، الإيجار، أو البيع العقاري.",
           "description_en": "Disputes related to ownership, rent, or real estate sale.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 603,
@@ -335,7 +335,7 @@ def services(request):
           "description_ar": "صياغة ومراجعة عقود المشاريع العقارية.",
           "description_en": "Drafting and reviewing real estate development project contracts.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 604,
@@ -344,7 +344,7 @@ def services(request):
           "description_ar": "القضايا المتعلقة بالعقود وأعمال التصميم والمراجعة.",
           "description_en": "Cases related to contracts and drafting & reviewing tasks.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 605,
@@ -353,7 +353,7 @@ def services(request):
           "description_ar": "تسوية النزاعات عبر الاتفاق أو اللجوء للتحكيم.",
           "description_en": "Settling disputes by agreement or resorting to arbitration.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 606,
@@ -362,7 +362,7 @@ def services(request):
           "description_ar": "القضايا المدنية بين الأفراد أو الكيانات القانونية.",
           "description_en": "Civil cases between individuals or legal entities.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 607,
@@ -371,7 +371,7 @@ def services(request):
           "description_ar": "المطالبة بالتعويضات المالية عبر المسار القانوني.",
           "description_en": "Seeking financial compensation through legal means.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 608,
@@ -380,7 +380,7 @@ def services(request):
           "description_ar": "النزاعات القانونية بين الأفراد والشركات.",
           "description_en": "Legal disputes between individuals and corporate entities.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 609,
@@ -389,7 +389,7 @@ def services(request):
           "description_ar": "القضايا العمالية كالعقود، الأجور، الفصل والإجازات.",
           "description_en": "Labor cases such as contracts, wage disputes, termination and leave.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 610,
@@ -398,7 +398,7 @@ def services(request):
           "description_ar": "القضايا الجنائية وتقديم الدفاع القانوني.",
           "description_en": "Criminal cases and providing legal defense.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 611,
@@ -407,7 +407,7 @@ def services(request):
           "description_ar": "تقديم الشكاوى ومتابعة جميع الإجراءات القانونية.",
           "description_en": "Filing complaints and tracking all legal procedures.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 612,
@@ -416,7 +416,7 @@ def services(request):
           "description_ar": "قضايا الأسرة كَ الطلاق، النفقة، الحضانة، وغيرها.",
           "description_en": "Family law matters like divorce, alimony, custody, etc.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         },
         {
           "id": 613,
@@ -425,7 +425,7 @@ def services(request):
           "description_ar": "تسوية النزاعات العائلية ودعم الاستشارات الأسرية.",
           "description_en": "Resolving family disputes amicably and providing consultations.",
           "icon": "https://www.svgrepo.com/svg/505182/legal-service",
-          "is_vib": false
+          "is_vib": False
         }
       ],
     }]})
