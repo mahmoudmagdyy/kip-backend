@@ -23,7 +23,7 @@ class SimpleRegisterSerializer(serializers.Serializer):
     country = serializers.CharField(required=False, allow_blank=True)
 class LoginSerializer(serializers.Serializer):
     phone = serializers.CharField(min_length=8, allow_blank=False, required=True)
-    password = serializers.CharField(min_length=8, allow_blank=False, required=True, write_only=True)
+    password = serializers.CharField( allow_blank=False, required=True, write_only=True)
 
 class UserSerializer(serializers.ModelSerializer):
     phone = serializers.SerializerMethodField()
