@@ -9,12 +9,12 @@ from rest_framework.permissions import AllowAny
 def services(request):
     return Response({
         "services": [
-            {"id": 1, "title": "Cleaning", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True},
-            {"id": 2, "title": "Plumbing", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": False},
-            {"id": 3, "title": "Electrical", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True},
-            {"id": 1, "title": "Cleaning", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True},
-            {"id": 2, "title": "Plumbing", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": False},
-            {"id": 3, "title": "Electrical", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True}
+            {"id": 1, "title": "قضايا قانونية", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True},
+            {"id": 2, "title": "قضايا قانونية", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": False},
+            {"id": 3, "title": "قضايا قانونية", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True},
+            {"id": 1, "title": "قضايا قانونية", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True},
+            {"id": 2, "title": "قضايا قانونية", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": False},
+            {"id": 3, "title": "قضايا قانونية", "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw", "is_vib": True}
         ]
     })
 
