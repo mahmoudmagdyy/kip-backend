@@ -411,7 +411,7 @@ def services(request):
         },
         {
           "id": 612,
-          "title_ar": "قانون الأسرة (الطلاق، النفقة، الحضانة)",
+          "title_ar": "قانون الأسرة (الطلاق، النفقة،الحضانة)",
           "title_en": "Family Law (Divorce, Alimony, Custody)",
           "description_ar": "قضايا الأسرة كَ الطلاق، النفقة، الحضانة، وغيرها.",
           "description_en": "Family law matters like divorce, alimony, custody, etc.",
