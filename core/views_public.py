@@ -15,7 +15,7 @@ def services(request):
       "title_en": "Legal Services & Corporate Sector",
       "description_ar": "خدمات قانونية شاملة للشركات والأفراد، تشمل الاستشارات والتوثيق والتأسيس.",
       "description_en": "Comprehensive legal services for companies and individuals, including consultancy, documentation, and incorporation.",
-      "icon": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-09%20at%209.19.11%20AM.jpeg",  
+      "icon": "https://nrjeftogvzgvuehkzmng.supabase.co/storage/v1/object/public/image/Gemini_Generated_Image_11h18411h18411h1.png",  
       "sub_services": [
         {
           "id": 101,
@@ -88,7 +88,7 @@ def services(request):
       "title_en": "Intellectual Property Services",
       "description_ar": "خدمات لحماية الأفكار والإبداعات عبر تسجيل براءات الاختراع والعلامات التجارية.",
       "description_en": "Services to protect ideas and creativity via patent and trademark registration.",
-      "icon": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-09%20at%209.27.26%20AM.jpeg",
+      "icon": "https://nrjeftogvzgvuehkzmng.supabase.co/storage/v1/object/public/image/Gemini_Generated_Image_nb9zdhnb9zdhnb9z.png",
       "sub_services": [
         {
           "id": 201,
@@ -143,7 +143,7 @@ def services(request):
       "title_en": "Translation & Communication Services",
       "description_ar": "خدمات ترجمة متعددة الأنواع بالإضافة إلى التواصل والعلاقات العامة.",
       "description_en": "Various translation services plus communication and public relations.",
-      "icon": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-09%20at%209.27.26%20AM.jpeg",
+      "icon": "https://nrjeftogvzgvuehkzmng.supabase.co/storage/v1/object/public/image/Gemini_Generated_Image_upjk3kupjk3kupjk.png",
       "sub_services": [
         {
           "id": 301,
@@ -207,7 +207,7 @@ def services(request):
       "title_en": "Administrative Support & Business Sector",
       "description_ar": "خدمات إدارية ودعم للأعمال تشمل التنظيم والمشورة.",
       "description_en": "Administrative and business support services including organization and consulting.",
-      "icon": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-09%20at%209.27.26%20AM.jpeg",
+      "icon": "https://nrjeftogvzgvuehkzmng.supabase.co/storage/v1/object/public/image/WhatsApp%20Image%202025-10-09%20at%204.14.21%20PM.jpeg",
       "sub_services": [
         {
           "id": 401,
@@ -262,7 +262,7 @@ def services(request):
       "title_en": "Financial Collection & Debt Services",
       "description_ar": "إدارة تحصيل المبالغ المستحقة وخدمات الديون.",
       "description_en": "Management of collection of owed amounts and debt services.",
-      "icon": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-09%20at%209.27.26%20AM.jpeg",
+      "icon": "https://nrjeftogvzgvuehkzmng.supabase.co/storage/v1/object/public/image/WhatsApp%20Image%202025-10-09%20at%204.14.22%20PM.jpeg",
       "sub_services": [
         {
           "id": 501,
