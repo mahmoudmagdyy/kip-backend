@@ -25,39 +25,62 @@ def services(request):
                         "title": "استشارات قانونية",
                         "description": "استشارة قانونية شاملة حول القضايا المدنية والجنائية.",
                         "image": "https://images.pexels.com/photos/442761/pexels-photo-442761.jpeg",
-                        "is_vib": False
+                        "is_vib": True
                     },
                     {
                         "id": 102,
                         "title": "صياغة العقود",
                         "description": "صياغة ومراجعة العقود التجارية والعقارية.",
                         "image": "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
-                        "is_vib": True
+                        "is_vib": False
                     }
                 ]
             },
-            {
+              {
                 "id": 2,
-                "title": "خدمات طبية",
-                "image": "https://images.pexels.com/photos/404718/pexels-photo-404718.jpeg",
+                "title": "قضايا قانونية",
+                "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg",
                 "is_vib": False,
                 "sub_services": [
                     {
-                        "id": 201,
-                        "title": "حجز كشف",
-                        "description": "إمكانية حجز كشف طبي لدى أفضل الأطباء.",
-                        "image": "https://images.pexels.com/photos/532758/pexels-photo-532758.jpeg",
+                        "id": 301,
+                        "title": "استشارات قانونية",
+                        "description": "استشارة قانونية شاملة حول القضايا المدنية والجنائية.",
+                        "image": "https://images.pexels.com/photos/442761/pexels-photo-442761.jpeg",
                         "is_vib": False
                     },
                     {
-                        "id": 202,
-                        "title": "تحاليل طبية",
-                        "description": "إجراء التحاليل الطبية مع تقارير مفصلة.",
-                        "image": "https://images.pexels.com/photos/3735761/pexels-photo-3735761.jpeg",
-                        "is_vib": True
+                        "id": 302,
+                        "title": "صياغة العقود",
+                        "description": "صياغة ومراجعة العقود التجارية والعقارية.",
+                        "image": "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
+                        "is_vib": False
                     }
                 ]
-            }
+            },
+              {
+                "id": 3,
+                "title": "قضايا قانونية",
+                "image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg",
+                "is_vib": True,
+                "sub_services": [
+                    {
+                        "id": 200,
+                        "title": "استشارات قانونية",
+                        "description": "استشارة قانونية شاملة حول القضايا المدنية والجنائية.",
+                        "image": "https://images.pexels.com/photos/442761/pexels-photo-442761.jpeg",
+                        "is_vib": False
+                    },
+                    {
+                        "id": 201,
+                        "title": "صياغة العقود",
+                        "description": "صياغة ومراجعة العقود التجارية والعقارية.",
+                        "image": "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
+                        "is_vib": False
+                    }
+                ]
+            },
+          
         ]
     })
 
