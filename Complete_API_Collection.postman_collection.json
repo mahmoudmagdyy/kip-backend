@@ -1,0 +1,1350 @@
+{
+  "info": {
+    "name": "KIP Booking System - Complete API Collection",
+    "description": "Complete API collection for KIP booking system including authentication, bookings, users, services, offers, and WebSocket endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "booking_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "offer_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "Check Phone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/check-phone/",
+              "host": ["{{base_url}}"],
+              "path": ["check-phone", ""]
+            }
+          }
+        },
+        {
+          "name": "Send OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/send-otp/",
+              "host": ["{{base_url}}"],
+              "path": ["send-otp", ""]
+            }
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"1234567890\",\n  \"code\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/verify-otp/",
+              "host": ["{{base_url}}"],
+              "path": ["verify-otp", ""]
+            }
+          }
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"phone\": \"1234567890\",\n  \"password\": \"password123\",\n  \"gender\": \"male\",\n  \"country\": \"USA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register/",
+              "host": ["{{base_url}}"],
+              "path": ["register", ""]
+            }
+          }
+        },
+        {
+          "name": "Register Without OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"1234567890\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"gender\": \"male\",\n  \"country\": \"USA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register-without-otp/",
+              "host": ["{{base_url}}"],
+              "path": ["register-without-otp", ""]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.access) {",
+                  "        pm.collectionVariables.set('jwt_token', response.access);",
+                  "        pm.collectionVariables.set('user_id', response.user.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"1234567890\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/login/",
+              "host": ["{{base_url}}"],
+              "path": ["login", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Current User Info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user_info/",
+              "host": ["{{base_url}}"],
+              "path": ["user_info", ""]
+            }
+          }
+        },
+        {
+          "name": "Update User Info",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"John Updated\",\n  \"last_name\": \"Doe Updated\",\n  \"gender\": \"male\",\n  \"country\": \"Canada\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/user_update_info/",
+              "host": ["{{base_url}}"],
+              "path": ["user_update_info", ""]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_password\": \"password123\",\n  \"new_password\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/change-password/",
+              "host": ["{{base_url}}"],
+              "path": ["change-password", ""]
+            }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"1234567890\",\n  \"new_password\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reset-password/",
+              "host": ["{{base_url}}"],
+              "path": ["reset-password", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📅 Bookings",
+      "item": [
+        {
+          "name": "Get User Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reserved/",
+              "host": ["{{base_url}}"],
+              "path": ["reserved", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Booking Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reserved/{{booking_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["reserved", "{{booking_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Booking",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service_name\": \"Updated Service\",\n  \"booking_date\": \"2025-12-25\",\n  \"booking_time\": \"14:00:00\",\n  \"status\": \"upcoming\",\n  \"notes\": \"Updated notes\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reserved/{{booking_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["reserved", "{{booking_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reserved/{{booking_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["reserved", "{{booking_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Available Time Slots",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reservations/available_slots/?date=2025-12-25",
+              "host": ["{{base_url}}"],
+              "path": ["reservations", "available_slots", ""],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2025-12-25"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.id) {",
+                  "        pm.collectionVariables.set('booking_id', response.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service_name\": \"Hair Cut\",\n  \"booking_date\": \"Dec 25, 2025\",\n  \"booking_time\": \"02:00 PM\",\n  \"status\": \"upcoming\",\n  \"notes\": \"Regular haircut appointment\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/booking/create/",
+              "host": ["{{base_url}}"],
+              "path": ["booking", "create", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Admin - Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/?sort_by=date_joined&sort_order=desc&limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", ""],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "date_joined"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "desc"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/stats/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "stats", ""]
+            }
+          }
+        },
+        {
+          "name": "Get User Filter Options",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/filter-options/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "filter-options", ""]
+            }
+          }
+        },
+        {
+          "name": "Get User Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/{{user_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "{{user_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Updated Name\",\n  \"last_name\": \"Updated Last\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users/{{user_id}}/update/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "{{user_id}}", "update", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/{{user_id}}/delete/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "{{user_id}}", "delete", ""]
+            }
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"New\",\n  \"last_name\": \"User\",\n  \"phone\": \"9876543210\",\n  \"password\": \"password123\",\n  \"gender\": \"female\",\n  \"country\": \"UK\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users/create/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "create", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Admin - Bookings",
+      "item": [
+        {
+          "name": "Get All Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/bookings/?sort_by=created_at&sort_order=desc&limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "bookings", ""],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "created_at"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "desc"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Booking Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/bookings/stats/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "bookings", "stats", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Booking Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/bookings/{{booking_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "bookings", "{{booking_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Booking Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"notes\": \"Service completed successfully\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/bookings/{{booking_id}}/update/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "bookings", "{{booking_id}}", "update", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Booking",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/bookings/{{booking_id}}/delete/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "bookings", "{{booking_id}}", "delete", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Booking (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"service_name\": \"Premium Service\",\n  \"booking_date\": \"2025-12-25\",\n  \"booking_time\": \"15:00:00\",\n  \"status\": \"upcoming\",\n  \"notes\": \"Admin created booking\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/bookings/create/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "bookings", "create", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎯 Admin - Offers",
+      "item": [
+        {
+          "name": "Get All Offers (Images Only)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/offers/?search=&status=&featured=&sort_by=-created_at&limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", ""],
+              "query": [
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "featured",
+                  "value": ""
+                },
+                {
+                  "key": "sort_by",
+                  "value": "-created_at"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Offer Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/offers/stats/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "stats", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Offer Filter Options",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/offers/filter-options/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "filter-options", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Offer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.id) {",
+                  "        pm.collectionVariables.set('offer_id', response.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Black Friday Sale\",\n  \"description\": \"Get 30% off on all services\",\n  \"discount_type\": \"percentage\",\n  \"discount_value\": \"30.00\",\n  \"valid_from\": \"2025-11-24T00:00:00Z\",\n  \"valid_until\": \"2025-11-30T23:59:59Z\",\n  \"status\": \"active\",\n  \"is_featured\": true,\n  \"usage_limit\": 500\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/offers/create/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "create", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Offer Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/offers/{{offer_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "{{offer_id}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Offer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Black Friday Sale\",\n  \"description\": \"Get 35% off on all services\",\n  \"discount_value\": \"35.00\",\n  \"valid_until\": \"2025-12-01T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/offers/{{offer_id}}/update/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "{{offer_id}}", "update", ""]
+            }
+          }
+        },
+        {
+          "name": "Toggle Offer Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/offers/{{offer_id}}/toggle-status/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "{{offer_id}}", "toggle-status", ""]
+            }
+          }
+        },
+        {
+          "name": "Toggle Offer Featured",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/offers/{{offer_id}}/toggle-featured/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "{{offer_id}}", "toggle-featured", ""]
+            }
+          }
+        },
+        {
+          "name": "Upload Offer Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/offers/{{offer_id}}/upload-image/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "{{offer_id}}", "upload-image", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Offer Image",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/offers/{{offer_id}}/delete-image/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "{{offer_id}}", "delete-image", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Offer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/offers/{{offer_id}}/delete/",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "offers", "{{offer_id}}", "delete", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛠️ Services",
+      "item": [
+        {
+          "name": "Get All Services",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/services/",
+              "host": ["{{base_url}}"],
+              "path": ["services", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Countries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/countries/",
+              "host": ["{{base_url}}"],
+              "path": ["countries", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Booking Settings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/booking-settings/",
+              "host": ["{{base_url}}"],
+              "path": ["booking-settings", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Dashboard - Services Management",
+      "item": [
+        {
+          "name": "Get Dashboard Services",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dashboard/services/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "services", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title_ar\": \"خدمة جديدة\",\n  \"title_en\": \"New Service\",\n  \"description_ar\": \"وصف الخدمة الجديدة\",\n  \"description_en\": \"Description of the new service\",\n  \"icon\": \"https://example.com/icon.png\",\n  \"is_active\": true,\n  \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/dashboard/services/create/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "services", "create", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Service Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dashboard/services/1/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "services", "1", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Service",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title_ar\": \"خدمة محدثة\",\n  \"title_en\": \"Updated Service\",\n  \"description_ar\": \"وصف محدث\",\n  \"description_en\": \"Updated description\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/dashboard/services/1/update/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "services", "1", "update", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Service",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dashboard/services/1/delete/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "services", "1", "delete", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Service Sub-Services",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dashboard/services/1/sub-services/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "services", "1", "sub-services", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Sub-Service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service\": 1,\n  \"title_ar\": \"خدمة فرعية جديدة\",\n  \"title_en\": \"New Sub-Service\",\n  \"description_ar\": \"وصف الخدمة الفرعية\",\n  \"description_en\": \"Sub-service description\",\n  \"icon\": \"https://example.com/sub-icon.png\",\n  \"is_vib\": false,\n  \"is_active\": true,\n  \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/dashboard/sub-services/create/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "sub-services", "create", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Sub-Service Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dashboard/sub-services/1/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "sub-services", "1", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Sub-Service",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title_ar\": \"خدمة فرعية محدثة\",\n  \"title_en\": \"Updated Sub-Service\",\n  \"description_ar\": \"وصف محدث\",\n  \"description_en\": \"Updated sub-service description\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/dashboard/sub-services/1/update/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "sub-services", "1", "update", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Sub-Service",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dashboard/sub-services/1/delete/",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard", "sub-services", "1", "delete", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔌 WebSocket Testing",
+      "item": [
+        {
+          "name": "WebSocket Connection Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/static/websocket_simple_test.html",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["static", "websocket_simple_test.html"]
+            },
+            "description": "Open this URL in browser to test WebSocket connection"
+          }
+        },
+        {
+          "name": "WebSocket Connection Test (Advanced)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/static/websocket_connection_test.html",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["static", "websocket_connection_test.html"]
+            },
+            "description": "Advanced WebSocket testing page"
+          }
+        },
+        {
+          "name": "Mobile Simulator",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/static/mobile_simulator.html",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["static", "mobile_simulator.html"]
+            },
+            "description": "Simulate mobile app booking creation"
+          }
+        },
+        {
+          "name": "Real-time Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/static/test_dashboard.html",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["static", "test_dashboard.html"]
+            },
+            "description": "Real-time dashboard for testing WebSocket notifications"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-set base URL if not set",
+          "if (!pm.collectionVariables.get('base_url')) {",
+          "    pm.collectionVariables.set('base_url', 'http://localhost:8000/api');",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test to handle common responses",
+          "if (pm.response.code === 401) {",
+          "    console.log('Authentication required. Please login first.');",
+          "}",
+          "",
+          "if (pm.response.code === 403) {",
+          "    console.log('Access forbidden. Check your permissions.');",
+          "}",
+          "",
+          "if (pm.response.code === 404) {",
+          "    console.log('Resource not found.');",
+          "}",
+          "",
+          "if (pm.response.code >= 500) {",
+          "    console.log('Server error occurred.');",
+          "}"
+        ]
+      }
+    }
+  ]
+}

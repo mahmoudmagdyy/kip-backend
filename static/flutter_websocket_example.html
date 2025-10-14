@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flutter Web WebSocket Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .connected { background: #d4edda; color: #155724; }
+        .disconnected { background: #f8d7da; color: #721c24; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .booking-item {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Flutter Web WebSocket Integration</h1>
+        
+        <h2>📱 How to Use in Flutter Web</h2>
+        
+        <h3>1. Include the WebSocket Client</h3>
+        <div class="code-block">
+&lt;script src="websocket_client.js"&gt;&lt;/script&gt;
+        </div>
+        
+        <h3>2. Initialize in Flutter Web</h3>
+        <div class="code-block">
+// In your Flutter Web app
+import 'dart:html' as html;
+import 'dart:js' as js;
+
+class WebSocketService {
+  static FlutterWebSocketHelper? _wsHelper;
+  
+  static void initialize() {
+    // Call JavaScript function to initialize WebSocket
+    js.context.callMethod('initializeWebSocket');
+  }
+  
+  static void connect() {
+    js.context.callMethod('connectWebSocket');
+  }
+  
+  static void disconnect() {
+    js.context.callMethod('disconnectWebSocket');
+  }
+  
+  static List&lt;Map&lt;String, dynamic&gt;&gt; getBookings() {
+    var result = js.context.callMethod('getBookings');
+    return List&lt;Map&lt;String, dynamic&gt;&gt;.from(result);
+  }
+}
+        </div>
+        
+        <h3>3. JavaScript Bridge Functions</h3>
+        <div class="code-block">
+// Add these functions to your HTML file
+let wsHelper = null;
+
+function initializeWebSocket() {
+  wsHelper = new FlutterWebSocketHelper();
+  wsHelper.initialize({
+    url: 'ws://localhost:8000/ws/admin/bookings/',
+    onBookingCreated: (booking) => {
+      // Notify Flutter about new booking
+      if (window.flutterWebSocketCallback) {
+        window.flutterWebSocketCallback('booking_created', booking);
+      }
+    },
+    onBookingUpdated: (booking) => {
+      if (window.flutterWebSocketCallback) {
+        window.flutterWebSocketCallback('booking_updated', booking);
+      }
+    },
+    onBookingDeleted: (booking) => {
+      if (window.flutterWebSocketCallback) {
+        window.flutterWebSocketCallback('booking_deleted', booking);
+      }
+    }
+  });
+}
+
+function connectWebSocket() {
+  if (wsHelper) wsHelper.connect();
+}
+
+function disconnectWebSocket() {
+  if (wsHelper) wsHelper.disconnect();
+}
+
+function getBookings() {
+  return wsHelper ? wsHelper.getBookings() : [];
+}
+        </div>
+        
+        <h3>4. Flutter Web Widget Example</h3>
+        <div class="code-block">
+class BookingDashboard extends StatefulWidget {
+  @override
+  _BookingDashboardState createState() => _BookingDashboardState();
+}
+
+class _BookingDashboardState extends State&lt;BookingDashboard&gt; {
+  List&lt;Map&lt;String, dynamic&gt;&gt; bookings = [];
+  
+  @override
+  void initState() {
+    super.initState();
+    // Set up callback for JavaScript
+    html.window.flutterWebSocketCallback = (type, data) {
+      setState(() {
+        switch (type) {
+          case 'booking_created':
+            bookings.insert(0, data);
+            break;
+          case 'booking_updated':
+            final index = bookings.indexWhere((b) => b['id'] == data['id']);
+            if (index != -1) {
+              bookings[index] = data;
+            }
+            break;
+          case 'booking_deleted':
+            bookings.removeWhere((b) => b['id'] == data['id']);
+            break;
+        }
+      });
+    };
+    
+    // Initialize WebSocket
+    WebSocketService.initialize();
+    WebSocketService.connect();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Real-time Bookings')),
+      body: ListView.builder(
+        itemCount: bookings.length,
+        itemBuilder: (context, index) {
+          final booking = bookings[index];
+          return Card(
+            child: ListTile(
+              title: Text(booking['service_name']),
+              subtitle: Text('${booking['user_details']['first_name']} ${booking['user_details']['last_name']}'),
+              trailing: Chip(
+                label: Text(booking['status']),
+                backgroundColor: _getStatusColor(booking['status']),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+  
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'upcoming': return Colors.blue;
+      case 'cancelled': return Colors.red;
+      case 'completed': return Colors.green;
+      default: return Colors.grey;
+    }
+  }
+}
+        </div>
+        
+        <h2>🧪 Live Test</h2>
+        <p>Test the WebSocket connection below:</p>
+        
+        <div id="status" class="status disconnected">
+            🔴 Disconnected
+        </div>
+        
+        <button onclick="testConnect()">Connect WebSocket</button>
+        <button onclick="testDisconnect()">Disconnect</button>
+        <button onclick="testRequestBookings()">Request Bookings</button>
+        
+        <div id="bookings-container">
+            <p>Click "Connect WebSocket" to test the connection...</p>
+        </div>
+    </div>
+
+    <script src="websocket_client.js"></script>
+    <script>
+        let wsHelper = null;
+        let bookings = [];
+
+        function testConnect() {
+            if (wsHelper) {
+                wsHelper.disconnect();
+            }
+            
+            wsHelper = new FlutterWebSocketHelper();
+            wsHelper.initialize({
+                url: 'ws://localhost:8000/ws/admin/bookings/',
+                onConnect: () => {
+                    updateStatus('🟢 Connected to WebSocket', 'connected');
+                },
+                onDisconnect: () => {
+                    updateStatus('🔴 Disconnected from WebSocket', 'disconnected');
+                },
+                onError: (error) => {
+                    updateStatus('🔴 WebSocket Error', 'disconnected');
+                },
+                onBookingCreated: (booking, allBookings) => {
+                    bookings = allBookings;
+                    renderBookings();
+                    console.log('🆕 New booking:', booking);
+                },
+                onBookingUpdated: (booking, allBookings) => {
+                    bookings = allBookings;
+                    renderBookings();
+                    console.log('✏️ Booking updated:', booking);
+                },
+                onBookingDeleted: (booking, allBookings) => {
+                    bookings = allBookings;
+                    renderBookings();
+                    console.log('🗑️ Booking deleted:', booking);
+                },
+                onBookingsData: (allBookings) => {
+                    bookings = allBookings;
+                    renderBookings();
+                    console.log('📋 Bookings data:', allBookings);
+                }
+            });
+        }
+
+        function testDisconnect() {
+            if (wsHelper) {
+                wsHelper.disconnect();
+            }
+        }
+
+        function testRequestBookings() {
+            if (wsHelper) {
+                wsHelper.requestBookings();
+            }
+        }
+
+        function updateStatus(message, type) {
+            const statusElement = document.getElementById('status');
+            statusElement.textContent = message;
+            statusElement.className = `status ${type}`;
+        }
+
+        function renderBookings() {
+            const container = document.getElementById('bookings-container');
+            
+            if (bookings.length === 0) {
+                container.innerHTML = '<p>No bookings found</p>';
+                return;
+            }
+
+            const bookingsHtml = bookings.map(booking => `
+                <div class="booking-item">
+                    <h4>${booking.service_name}</h4>
+                    <p><strong>User:</strong> ${booking.user_details.first_name} ${booking.user_details.last_name}</p>
+                    <p><strong>Date:</strong> ${booking.booking_date} at ${booking.booking_time}</p>
+                    <p><strong>Status:</strong> ${booking.status}</p>
+                    <p><strong>Phone:</strong> ${booking.user_details.phone}</p>
+                </div>
+            `).join('');
+
+            container.innerHTML = bookingsHtml;
+        }
+
+        // Auto-connect on page load
+        window.addEventListener('load', () => {
+            console.log('🚀 Page loaded');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile App - Book Service</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .mobile-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .demo-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .demo-info h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .demo-info p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="header">
+            <h1>📱 Mobile App</h1>
+            <p>Book Your Service</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="demo-info">
+                <h3>🎯 Demo Instructions</h3>
+                <p>Fill out this form and click "Book Service" to create a booking. The booking will appear instantly in the dashboard!</p>
+            </div>
+            
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="service_name">Service Name</label>
+                    <select id="service_name" name="service_name" required>
+                        <option value="">Select a service</option>
+                        <option value="Hair Cut">Hair Cut</option>
+                        <option value="Hair Styling">Hair Styling</option>
+                        <option value="Hair Coloring">Hair Coloring</option>
+                        <option value="Facial Treatment">Facial Treatment</option>
+                        <option value="Massage">Massage</option>
+                        <option value="Manicure">Manicure</option>
+                        <option value="Pedicure">Pedicure</option>
+                        <option value="Eyebrow Shaping">Eyebrow Shaping</option>
+                        <option value="Makeup">Makeup</option>
+                        <option value="Nail Art">Nail Art</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="booking_date">Booking Date</label>
+                    <input type="date" id="booking_date" name="booking_date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="booking_time">Booking Time</label>
+                    <select id="booking_time" name="booking_time" required>
+                        <option value="">Select time</option>
+                        <option value="09:00">9:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                        <option value="13:00">1:00 PM</option>
+                        <option value="14:00">2:00 PM</option>
+                        <option value="15:00">3:00 PM</option>
+                        <option value="16:00">4:00 PM</option>
+                        <option value="17:00">5:00 PM</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notes (Optional)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Any special requests or notes..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn" id="submitBtn">
+                    📅 Book Service
+                </button>
+            </form>
+            
+            <div id="status" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Set default date to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('booking_date').value = tomorrow.toISOString().split('T')[0];
+        
+        // Set default time
+        document.getElementById('booking_time').value = '14:00';
+        
+        document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const statusDiv = document.getElementById('status');
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Booking...';
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'status loading';
+            statusDiv.textContent = 'Creating booking...';
+            
+            try {
+                const formData = new FormData(this);
+                const bookingData = {
+                    service_name: formData.get('service_name'),
+                    booking_date: formData.get('booking_date'),
+                    booking_time: formData.get('booking_time'),
+                    notes: formData.get('notes') || ''
+                };
+                
+                console.log('📤 Sending booking data:', bookingData);
+                
+                // Convert time to 12-hour format for API
+                const time12Hour = convertTo12Hour(bookingData.booking_time);
+                const dateFormatted = formatDate(bookingData.booking_date);
+                
+                const apiData = {
+                    ...bookingData,
+                    booking_date: dateFormatted,
+                    booking_time: time12Hour
+                };
+                
+                console.log('📤 API data:', apiData);
+                
+                const response = await fetch('/api/booking/create/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(apiData)
+                });
+                
+                const result = await response.json();
+                console.log('📥 API response:', result);
+                
+                if (response.ok && result.success) {
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = `
+                        ✅ <strong>Booking Created Successfully!</strong><br>
+                        📋 Service: ${bookingData.service_name}<br>
+                        📅 Date: ${bookingData.booking_date}<br>
+                        🕐 Time: ${bookingData.booking_time}<br>
+                        <br>
+                        <small>Check the dashboard to see the real-time update!</small>
+                    `;
+                    
+                    // Reset form
+                    this.reset();
+                    document.getElementById('booking_date').value = tomorrow.toISOString().split('T')[0];
+                    document.getElementById('booking_time').value = '14:00';
+                    
+                } else {
+                    throw new Error(result.message || 'Failed to create booking');
+                }
+                
+            } catch (error) {
+                console.error('❌ Error creating booking:', error);
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `
+                    ❌ <strong>Error Creating Booking</strong><br>
+                    ${error.message}
+                `;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📅 Book Service';
+            }
+        });
+        
+        function convertTo12Hour(time24) {
+            const [hours, minutes] = time24.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const hour12 = hour % 12 || 12;
+            return `${hour12}:${minutes} ${ampm}`;
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        }
+    </script>
+</body>
+</html>

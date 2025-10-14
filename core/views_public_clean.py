@@ -59,3 +59,4 @@ def countries(request):
         {"code": "DZ", "name": "Algeria"},
     ]
     return Response(data)
+

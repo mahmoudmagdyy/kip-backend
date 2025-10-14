@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import PhoneOTP, ReservedSlot, Profile
+from .models import PhoneOTP, ReservedSlot, Profile, Service, SubService, BookingSettings, Offer
 
 
 
@@ -94,8 +94,121 @@ class CreateReservedSlotSerializer(serializers.Serializer):
             return parsed_time
         except ValueError:
             raise serializers.ValidationError("Time must be in format '01:00 PM'")
+    
+    def create(self, validated_data):
+        """Create a new ReservedSlot instance"""
+        from .models import ReservedSlot
+        return ReservedSlot.objects.create(**validated_data)
 
 
 class ChangePasswordSerializer(serializers.Serializer):
     current_password = serializers.CharField(min_length=8, required=True, write_only=True)
     new_password = serializers.CharField(min_length=8, required=True, write_only=True)
+
+
+class SubServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubService
+        fields = ['id', 'title_ar', 'title_en', 'description_ar', 'description_en', 'icon', 'is_vib', 'is_active', 'order']
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+    sub_services = SubServiceSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Service
+        fields = ['id', 'title_ar', 'title_en', 'description_ar', 'description_en', 'icon', 'is_active', 'order', 'sub_services']
+
+
+class ServiceCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = ['title_ar', 'title_en', 'description_ar', 'description_en', 'icon', 'is_active', 'order']
+
+
+class SubServiceCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubService
+        fields = ['service', 'title_ar', 'title_en', 'description_ar', 'description_en', 'icon', 'is_vib', 'is_active', 'order']
+
+
+class BookingSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookingSettings
+        fields = ['id', 'WORKING_HOURS_START', 'WORKING_HOURS_END', 'DEFAULT_RESERVATION_DURATION_MINUTES', 'OFF_DAYS', 'is_active', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class OfferSerializer(serializers.ModelSerializer):
+    created_by_name = serializers.SerializerMethodField()
+    is_valid = serializers.SerializerMethodField()
+    remaining_uses = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Offer
+        fields = [
+            'id', 'title', 'description', 'image', 'discount_type', 'discount_value', 
+            'valid_from', 'valid_until', 'status', 'is_featured', 'usage_limit', 
+            'usage_count', 'created_by', 'created_by_name', 'created_at', 'updated_at',
+            'is_valid', 'remaining_uses'
+        ]
+        read_only_fields = ['id', 'created_by', 'created_at', 'updated_at', 'usage_count']
+    
+    def get_created_by_name(self, obj):
+        return f"{obj.created_by.first_name} {obj.created_by.last_name}".strip() or obj.created_by.username
+    
+    def get_is_valid(self, obj):
+        return obj.is_valid()
+    
+    def get_remaining_uses(self, obj):
+        if obj.usage_limit is None:
+            return None  # Unlimited
+        return max(0, obj.usage_limit - obj.usage_count)
+
+
+class OfferCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Offer
+        fields = [
+            'title', 'description', 'image', 'discount_type', 'discount_value', 
+            'valid_from', 'valid_until', 'status', 'is_featured', 'usage_limit'
+        ]
+    
+    def validate_discount_value(self, value):
+        """Validate discount value based on type"""
+        discount_type = self.initial_data.get('discount_type', 'percentage')
+        if discount_type == 'percentage' and (value < 0 or value > 100):
+            raise serializers.ValidationError("Percentage discount must be between 0 and 100")
+        elif discount_type == 'fixed' and value < 0:
+            raise serializers.ValidationError("Fixed discount must be positive")
+        return value
+    
+    def validate(self, data):
+        """Validate that valid_until is after valid_from"""
+        if data['valid_until'] <= data['valid_from']:
+            raise serializers.ValidationError("Valid until date must be after valid from date")
+        return data
+
+
+class OfferUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Offer
+        fields = [
+            'title', 'description', 'image', 'discount_type', 'discount_value', 
+            'valid_from', 'valid_until', 'status', 'is_featured', 'usage_limit'
+        ]
+    
+    def validate_discount_value(self, value):
+        """Validate discount value based on type"""
+        discount_type = self.initial_data.get('discount_type', 'percentage')
+        if discount_type == 'percentage' and (value < 0 or value > 100):
+            raise serializers.ValidationError("Percentage discount must be between 0 and 100")
+        elif discount_type == 'fixed' and value < 0:
+            raise serializers.ValidationError("Fixed discount must be positive")
+        return value
+    
+    def validate(self, data):
+        """Validate that valid_until is after valid_from"""
+        if data['valid_until'] <= data['valid_from']:
+            raise serializers.ValidationError("Valid until date must be after valid from date")
+        return data

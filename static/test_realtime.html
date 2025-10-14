@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Booking Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .connected { background: #d4edda; color: #155724; }
+        .disconnected { background: #f8d7da; color: #721c24; }
+        .booking-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .bookings-list {
+            margin-top: 20px;
+        }
+        .booking-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .booking-item.new {
+            border-left-color: #28a745;
+            background: #d4edda;
+            animation: highlight 2s ease-out;
+        }
+        @keyframes highlight {
+            0% { background: #d4edda; }
+            100% { background: #f8f9fa; }
+        }
+        .notifications {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .notification {
+            background: #28a745;
+            color: white;
+            padding: 15px;
+            margin: 5px 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Real-time Booking Test Dashboard</h1>
+        
+        <div class="status" id="connectionStatus">
+            <span id="statusText">Connecting...</span>
+        </div>
+
+        <div class="booking-form">
+            <h3>Create Test Booking</h3>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="serviceName">Service Name:</label>
+                    <input type="text" id="serviceName" value="Test Service" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingDate">Booking Date:</label>
+                    <input type="date" id="bookingDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingTime">Booking Time:</label>
+                    <input type="time" id="bookingTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="userId">User ID:</label>
+                    <select id="userId">
+                        <option value="1">User 1 (John Doe)</option>
+                        <option value="2">User 2 (Alice Smith)</option>
+                        <option value="5">User 5 (Test User)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Create Booking</button>
+            </form>
+        </div>
+
+        <div class="bookings-list">
+            <h3>Recent Bookings</h3>
+            <button class="btn" onclick="loadBookings()">Refresh Bookings</button>
+            <div id="bookingsContainer">
+                <p>Loading bookings...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications" id="notifications"></div>
+
+    <script src="/static/js/websocket.js"></script>
+    <script>
+        let authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjo0OTEzNzc2MjkxLCJpYXQiOjE3NjAxNzYyOTEsImp0aSI6IjY3NGFhNDZhODE2ZTQxMWRhZmJjYzZlNWNhZWNkN2M4IiwidXNlcl9pZCI6IjQifQ.gofrJhFcjdv8ANTqd74QcfhLGEF8UUMzQzRQy0o8Wxw';
+
+        // Set today's date as default
+        document.getElementById('bookingDate').value = new Date().toISOString().split('T')[0];
+
+        // Initialize WebSocket
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.bookingWebSocket) {
+                window.bookingWebSocket.connect(authToken);
+                
+                // Override connection handlers to update UI
+                const originalOnOpen = window.bookingWebSocket.socket.onopen;
+                window.bookingWebSocket.socket.onopen = function(event) {
+                    if (originalOnOpen) originalOnOpen.call(this, event);
+                    updateConnectionStatus(true);
+                };
+
+                const originalOnClose = window.bookingWebSocket.socket.onclose;
+                window.bookingWebSocket.socket.onclose = function(event) {
+                    if (originalOnClose) originalOnClose.call(this, event);
+                    updateConnectionStatus(false);
+                };
+            }
+
+            loadBookings();
+        });
+
+        function updateConnectionStatus(connected) {
+            const statusEl = document.getElementById('connectionStatus');
+            const textEl = document.getElementById('statusText');
+            
+            if (connected) {
+                statusEl.className = 'status connected';
+                textEl.textContent = 'Connected to WebSocket';
+            } else {
+                statusEl.className = 'status disconnected';
+                textEl.textContent = 'Disconnected from WebSocket';
+            }
+        }
+
+        // Handle booking form submission
+        document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                user_id: parseInt(document.getElementById('userId').value),
+                service_name: document.getElementById('serviceName').value,
+                booking_date: document.getElementById('bookingDate').value,
+                booking_time: document.getElementById('bookingTime').value,
+                notes: 'Test booking from dashboard'
+            };
+
+            try {
+                const response = await fetch('/api/booking/create/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Booking Created!', 'Your booking has been created successfully.', 'success');
+                    loadBookings();
+                } else {
+                    showNotification('Error', result.message, 'error');
+                }
+            } catch (error) {
+                showNotification('Error', 'Failed to create booking: ' + error.message, 'error');
+            }
+        });
+
+        // Load bookings
+        async function loadBookings() {
+            try {
+                const response = await fetch('/api/admin/bookings/', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayBookings(data.data.slice(0, 10)); // Show only last 10
+                }
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        // Display bookings
+        function displayBookings(bookings) {
+            const container = document.getElementById('bookingsContainer');
+            
+            if (bookings.length === 0) {
+                container.innerHTML = '<p>No bookings found</p>';
+                return;
+            }
+
+            container.innerHTML = bookings.map(booking => `
+                <div class="booking-item" data-booking-id="${booking.id}">
+                    <h4>${booking.user_details.first_name} ${booking.user_details.last_name}</h4>
+                    <p><strong>Service:</strong> ${booking.service_name}</p>
+                    <p><strong>Date:</strong> ${booking.booking_date} at ${booking.booking_time}</p>
+                    <p><strong>Status:</strong> ${booking.status}</p>
+                    <p><strong>Created:</strong> ${new Date(booking.created_at).toLocaleString()}</p>
+                </div>
+            `).join('');
+        }
+
+        // Show notification
+        function showNotification(title, message, type = 'info') {
+            const notifications = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <h4>${title}</h4>
+                <p>${message}</p>
+            `;
+            
+            notifications.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        // WebSocket event handlers
+        window.addBookingToList = function(bookingData) {
+            console.log('New booking received:', bookingData);
+            showNotification('New Booking!', 
+                `${bookingData.user_details.first_name} ${bookingData.user_details.last_name} booked ${bookingData.service_name}`, 
+                'success');
+            loadBookings();
+        };
+
+        window.updateBookingInList = function(bookingData) {
+            console.log('Booking updated:', bookingData);
+            showNotification('Booking Updated', 
+                `Booking for ${bookingData.user_details.first_name} ${bookingData.user_details.last_name} has been updated`, 
+                'info');
+            loadBookings();
+        };
+
+        window.removeBookingFromList = function(bookingId) {
+            console.log('Booking deleted:', bookingId);
+            showNotification('Booking Deleted', 'A booking has been deleted', 'warning');
+            loadBookings();
+        };
+    </script>
+</body>
+</html>
