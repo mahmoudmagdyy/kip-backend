@@ -7,6 +7,7 @@ from . import views_booking_management as booking_mgmt
 from . import views_admin_booking as admin_booking
 from . import views_admin_users as admin_users
 from . import views_admin_offers as admin_offers
+from . import views_agent_booking as agent_booking
 
 
 
@@ -79,4 +80,7 @@ urlpatterns = [
     path('admin/offers/<int:offer_id>/delete-image/', admin_offers.admin_delete_offer_image, name="admin-delete-offer-image"),
     path('admin/offers/create-image/', admin_offers.admin_create_offer_image, name="admin-create-offer-image"),
     path('admin/offers/create/', admin_offers.admin_create_offer, name="admin-create-offer"),
+    
+    # Agent Booking Endpoint (Public)
+    path('agent/booking/create/', agent_booking.agent_create_booking, name="agent-create-booking"),
 ]
