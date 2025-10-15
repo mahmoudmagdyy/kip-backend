@@ -1,16 +1,59 @@
-asgiref==3.10.0
-certifi==2025.10.5
-charset-normalizer==3.4.3
+# Production requirements for deployment
 Django==5.2.7
-django-cors-headers==4.9.0
-django-filter==25.2
-djangorestframework==3.16.1
-djangorestframework_simplejwt==5.5.1
-gunicorn==23.0.0
-idna==3.10
-packaging==25.0
-PyJWT==2.10.1
-requests==2.32.5
-sqlparse==0.5.3
-urllib3==2.5.0
-whitenoise==6.11.0
+djangorestframework==3.15.2
+django-cors-headers==4.3.1
+django-filter==23.5
+djangorestframework-simplejwt==5.3.0
+
+# Database
+dj-database-url==3.0.1
+psycopg2-binary==2.9.9
+
+# WebSocket and Channels
+channels==4.0.0
+channels-redis==4.1.0
+redis==5.0.1
+
+# ASGI server
+daphne==4.0.0
+uvicorn==0.24.0
+
+# Static files and media
+whitenoise==6.6.0
+Pillow==10.1.0
+
+# Production server
+gunicorn==21.2.0
+
+# Environment and configuration
+python-decouple==3.8
+python-dotenv==1.0.0
+
+# Monitoring and logging
+sentry-sdk==1.38.0
+
+# Security
+django-security==0.1.0
+
+# Caching
+django-redis==5.4.0
+
+# Email
+django-anymail==10.1
+
+# Testing
+pytest==7.4.3
+pytest-django==4.7.0
+pytest-cov==4.1.0
+
+# Development tools (optional)
+django-debug-toolbar==4.2.0
+django-extensions==3.2.3
+
+# WebSocket testing
+websockets==12.0
+
+# Additional utilities
+requests==2.31.0
+celery==5.3.4
+django-celery-beat==2.5.0
