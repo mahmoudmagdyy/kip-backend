@@ -4,8 +4,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.db.models import Q
 from django.utils import timezone
+from django.conf import settings
+import os
 from .models import Offer
 from .serializer import OfferSerializer, OfferCreateSerializer, OfferUpdateSerializer
+from .utils import save_media_to_static, get_media_url
 
 
 @api_view(['GET'])
@@ -283,16 +286,39 @@ def admin_upload_offer_image(request, offer_id):
                 'error': 'No image file provided'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        # Delete old image if exists
-        if offer.image:
-            offer.image.delete(save=False)
+        # Get the uploaded file
+        uploaded_file = request.FILES['image']
+        filename = uploaded_file.name
         
-        # Save new image
-        offer.image = request.FILES['image']
-        offer.save()
-        
-        serializer = OfferSerializer(offer)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # Save to static files in production
+        if not settings.DEBUG:
+            # Create static/media directory if it doesn't exist
+            static_media_dir = os.path.join(settings.STATIC_ROOT, 'media')
+            os.makedirs(static_media_dir, exist_ok=True)
+            
+            # Save file to static directory
+            file_path = os.path.join(static_media_dir, filename)
+            with open(file_path, 'wb') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
+            
+            # Update offer with static URL
+            offer.image_url = f'/static/media/{filename}'
+            offer.save()
+            
+            return Response({
+                'success': True,
+                'message': 'Image uploaded successfully',
+                'image_url': f'/static/media/{filename}',
+                'offer_id': offer.id
+            }, status=status.HTTP_200_OK)
+        else:
+            # In development, use default media handling
+            offer.image = uploaded_file
+            offer.save()
+            
+            serializer = OfferSerializer(offer)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         
     except Offer.DoesNotExist:
         return Response({
@@ -344,10 +370,14 @@ def admin_create_offer_image(request):
                 'error': 'No image file provided'
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        # Get the uploaded file
+        uploaded_file = request.FILES['image']
+        filename = uploaded_file.name
+
         # Create offer with sensible defaults for required fields
         now = timezone.now()
         offer = Offer(
-            title=(request.FILES['image'].name or 'Offer Image'),
+            title=(filename or 'Offer Image'),
             description='',
             discount_type='percentage',
             discount_value=0,
@@ -357,11 +387,33 @@ def admin_create_offer_image(request):
             is_featured=False,
             created_by=request.user,
         )
-        offer.image = request.FILES['image']
-        offer.save()
 
-        # Return minimal image-only payload
-        image_url = request.build_absolute_uri(offer.image.url) if offer.image else None
+        # Save to static files in production
+        if not settings.DEBUG:
+            # Create static/media directory if it doesn't exist
+            static_media_dir = os.path.join(settings.STATIC_ROOT, 'media')
+            os.makedirs(static_media_dir, exist_ok=True)
+            
+            # Save file to static directory
+            file_path = os.path.join(static_media_dir, filename)
+            with open(file_path, 'wb') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
+            
+            # Set static URL
+            offer.image_url = f'/static/media/{filename}'
+            offer.save()
+            
+            # Return static URL
+            image_url = f'/static/media/{filename}'
+        else:
+            # In development, use default media handling
+            offer.image = uploaded_file
+            offer.save()
+            
+            # Return media URL
+            image_url = request.build_absolute_uri(offer.image.url) if offer.image else None
+
         return Response({"image": image_url}, status=status.HTTP_201_CREATED)
 
     except Exception as e:
