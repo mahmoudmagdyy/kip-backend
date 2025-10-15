@@ -101,10 +101,10 @@ ASGI_APPLICATION = 'backend.asgi.application'
 
 # Database
 # Use environment variable for database URL (for cloud deployment)
-DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3')
+DATABASE_URL = os.environ.get('DATABASE_URL', '')
 
-# Validate DATABASE_URL
-if not DATABASE_URL or DATABASE_URL == '://':
+# Validate DATABASE_URL and handle invalid formats
+if not DATABASE_URL or DATABASE_URL == '://' or '://' not in DATABASE_URL or DATABASE_URL.startswith('://'):
     # Fallback to SQLite if DATABASE_URL is not set or invalid
     DATABASES = {
         'default': {
@@ -113,10 +113,20 @@ if not DATABASE_URL or DATABASE_URL == '://':
         }
     }
 else:
-    # Use the provided DATABASE_URL
-    DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL)
-    }
+    try:
+        # Use the provided DATABASE_URL
+        DATABASES = {
+            'default': dj_database_url.parse(DATABASE_URL)
+        }
+    except Exception as e:
+        # If parsing fails, fallback to SQLite
+        print(f"Database URL parsing failed: {e}")
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 
 # REST Framework settings
 REST_FRAMEWORK = {
