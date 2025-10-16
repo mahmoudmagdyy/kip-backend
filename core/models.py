@@ -58,6 +58,8 @@ class Profile(models.Model):
         return f"Profile({self.user.username})"
 
 
+
+
 class Service(models.Model):
     title_ar = models.CharField(max_length=200)
     title_en = models.CharField(max_length=200)
@@ -73,7 +75,8 @@ class Service(models.Model):
         ordering = ['order', 'id']
 
     def __str__(self):
-        return f"{self.title_en}"
+        return self.title_en
+
 
 
 class SubService(models.Model):

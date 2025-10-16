@@ -6,6 +6,8 @@ from django.db.models import Q
 from django.utils import timezone
 from django.conf import settings
 import os
+import uuid
+import time
 from .models import Offer
 from .serializer import OfferSerializer, OfferCreateSerializer, OfferUpdateSerializer
 from .utils import save_media_to_static, get_media_url
@@ -288,37 +290,32 @@ def admin_upload_offer_image(request, offer_id):
         
         # Get the uploaded file
         uploaded_file = request.FILES['image']
-        filename = uploaded_file.name
         
-        # Save to static files in production
-        if not settings.DEBUG:
-            # Create static/media directory if it doesn't exist
-            static_media_dir = os.path.join(settings.STATIC_ROOT, 'media')
-            os.makedirs(static_media_dir, exist_ok=True)
-            
-            # Save file to static directory
-            file_path = os.path.join(static_media_dir, filename)
-            with open(file_path, 'wb') as destination:
-                for chunk in uploaded_file.chunks():
-                    destination.write(chunk)
-            
-            # Update offer with static URL
-            offer.image_url = f'/static/media/{filename}'
-            offer.save()
-            
-            return Response({
-                'success': True,
-                'message': 'Image uploaded successfully',
-                'image_url': f'/static/media/{filename}',
-                'offer_id': offer.id
-            }, status=status.HTTP_200_OK)
-        else:
-            # In development, use default media handling
-            offer.image = uploaded_file
-            offer.save()
-            
-            serializer = OfferSerializer(offer)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        # Generate unique filename
+        file_extension = os.path.splitext(uploaded_file.name)[1]
+        timestamp = int(time.time())
+        unique_filename = f"offer_{offer_id}_{timestamp}_{uuid.uuid4().hex[:8]}{file_extension}"
+        
+        # Save to media directory
+        media_dir = settings.MEDIA_ROOT
+        os.makedirs(media_dir, exist_ok=True)
+        
+        # Save file to media directory
+        file_path = os.path.join(media_dir, unique_filename)
+        with open(file_path, 'wb') as destination:
+            for chunk in uploaded_file.chunks():
+                destination.write(chunk)
+        
+        # Update offer with media URL
+        offer.image_url = f'/media/{unique_filename}'
+        offer.save()
+        
+        return Response({
+            'success': True,
+            'message': 'Image uploaded successfully',
+            'image_url': f'/media/{unique_filename}',
+            'offer_id': offer.id
+        }, status=status.HTTP_200_OK)
         
     except Offer.DoesNotExist:
         return Response({
@@ -372,12 +369,16 @@ def admin_create_offer_image(request):
 
         # Get the uploaded file
         uploaded_file = request.FILES['image']
-        filename = uploaded_file.name
+        
+        # Generate unique filename
+        file_extension = os.path.splitext(uploaded_file.name)[1]
+        timestamp = int(time.time())
+        unique_filename = f"offer_{timestamp}_{uuid.uuid4().hex[:8]}{file_extension}"
 
         # Create offer with sensible defaults for required fields
         now = timezone.now()
         offer = Offer(
-            title=(filename or 'Offer Image'),
+            title=(uploaded_file.name or 'Offer Image'),
             description='',
             discount_type='percentage',
             discount_value=0,
@@ -388,31 +389,22 @@ def admin_create_offer_image(request):
             created_by=request.user,
         )
 
-        # Save to static files in production
-        if not settings.DEBUG:
-            # Create static/media directory if it doesn't exist
-            static_media_dir = os.path.join(settings.STATIC_ROOT, 'media')
-            os.makedirs(static_media_dir, exist_ok=True)
-            
-            # Save file to static directory
-            file_path = os.path.join(static_media_dir, filename)
-            with open(file_path, 'wb') as destination:
-                for chunk in uploaded_file.chunks():
-                    destination.write(chunk)
-            
-            # Set static URL
-            offer.image_url = f'/static/media/{filename}'
-            offer.save()
-            
-            # Return static URL
-            image_url = f'/static/media/{filename}'
-        else:
-            # In development, use default media handling
-            offer.image = uploaded_file
-            offer.save()
-            
-            # Return media URL
-            image_url = request.build_absolute_uri(offer.image.url) if offer.image else None
+        # Save to media directory
+        media_dir = settings.MEDIA_ROOT
+        os.makedirs(media_dir, exist_ok=True)
+        
+        # Save file to media directory
+        file_path = os.path.join(media_dir, unique_filename)
+        with open(file_path, 'wb') as destination:
+            for chunk in uploaded_file.chunks():
+                destination.write(chunk)
+        
+        # Set media URL
+        offer.image_url = f'/media/{unique_filename}'
+        offer.save()
+        
+        # Return media URL
+        image_url = f'/media/{unique_filename}'
 
         return Response({"image": image_url}, status=status.HTTP_201_CREATED)
 

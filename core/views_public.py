@@ -21,13 +21,55 @@ def services(request):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def offers(request):
-    return Response({
-        "offers": [
-            {"image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw"},
-            {"image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw"},
-            {"image": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?_gl=1*1mgn3hc*_ga*MTE1NDQ1ODM0LjE3NTk0OTA2NzM.*_ga_8JE65Q40S6*czE3NTk5NDQ3ODQkbzIkZzAkdDE3NTk5NDQ3ODQkajYwJGwwJGgw"}
-        ]
-    })
+    """Get all active offers for mobile app"""
+    try:
+        from .models import Offer
+        from django.utils import timezone
+        
+        # Get active offers that are currently valid
+        now = timezone.now()
+        offers = Offer.objects.filter(
+            status='active',
+            valid_from__lte=now,
+            valid_until__gte=now
+        ).order_by('-is_featured', '-created_at')
+        
+        # Build response with image URLs
+        offers_data = []
+        for offer in offers:
+            offer_data = {
+                "id": offer.id,
+                "title": offer.title,
+                "description": offer.description,
+                "discount_type": offer.discount_type,
+                "discount_value": str(offer.discount_value),
+                "valid_from": offer.valid_from.isoformat() if offer.valid_from else None,
+                "valid_until": offer.valid_until.isoformat() if offer.valid_until else None,
+                "is_featured": offer.is_featured,
+                "image": None
+            }
+            
+            # Add image URL if available
+            if offer.image_url:
+                # Build absolute URL for the image
+                offer_data["image"] = request.build_absolute_uri(offer.image_url)
+            elif offer.image:
+                # Fallback to Django's image field
+                offer_data["image"] = request.build_absolute_uri(offer.image.url)
+            
+            offers_data.append(offer_data)
+        
+        return Response({
+            "success": True,
+            "offers": offers_data
+        })
+        
+    except Exception as e:
+        return Response({
+            "success": False,
+            "message": f"Error retrieving offers: {str(e)}",
+            "offers": []
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET'])

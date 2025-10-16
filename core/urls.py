@@ -8,6 +8,7 @@ from . import views_admin_booking as admin_booking
 from . import views_admin_users as admin_users
 from . import views_admin_offers as admin_offers
 from . import views_agent_booking as agent_booking
+from . import views_user_services as user_services
 
 
 
@@ -83,4 +84,10 @@ urlpatterns = [
     
     # Agent Booking Endpoint (Public)
     path('agent/booking/create/', agent_booking.agent_create_booking, name="agent-create-booking"),
+    
+    # User Service Creation Endpoints (Public)
+    path('user/services/', user_services.user_get_services, name="user-get-services"),
+    path('user/services/create/', user_services.user_create_service, name="user-create-service"),
+    path('user/services/<int:service_id>/sub-services/', user_services.user_get_sub_services, name="user-get-sub-services"),
+    path('user/sub-services/create/', user_services.user_create_sub_service, name="user-create-sub-service"),
 ]

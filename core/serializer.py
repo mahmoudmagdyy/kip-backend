@@ -107,24 +107,44 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class SubServiceSerializer(serializers.ModelSerializer):
+    icon = serializers.SerializerMethodField()
+    
     class Meta:
         model = SubService
         fields = ['id', 'title_ar', 'title_en', 'description_ar', 'description_en', 'icon', 'is_vib', 'is_active', 'order']
+    
+    def get_icon(self, obj):
+        request = self.context.get('request')
+        if obj.icon:
+            if obj.icon.startswith('http'):
+                return obj.icon
+            return f"http://{request.get_host()}{obj.icon}"
+        return None
 
 
 class ServiceSerializer(serializers.ModelSerializer):
     sub_services = SubServiceSerializer(many=True, read_only=True)
+    icon = serializers.SerializerMethodField()
     
     class Meta:
         model = Service
         fields = ['id', 'title_ar', 'title_en', 'description_ar', 'description_en', 'icon', 'is_active', 'order', 'sub_services']
+    
+    def get_icon(self, obj):
+        request = self.context.get('request')
+        if obj.icon:
+            if obj.icon.startswith('http'):
+                return obj.icon
+            return f"http://{request.get_host()}{obj.icon}"
+        return None
 
+
+# Removed duplicate ServiceSerializer - using the one above with sub_services
 
 class ServiceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = ['title_ar', 'title_en', 'description_ar', 'description_en', 'icon', 'is_active', 'order']
-
 
 class SubServiceCreateSerializer(serializers.ModelSerializer):
     class Meta:

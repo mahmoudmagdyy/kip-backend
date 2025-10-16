@@ -1,0 +1,37 @@
+name: service_creation_example
+description: Flutter example for creating services with image upload
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # HTTP client for API calls
+  http: ^1.1.0
+  
+  # Image picker for selecting images from gallery/camera
+  image_picker: ^1.0.4
+  
+  # Path utilities for file handling
+  path: ^1.8.3
+  
+  # Additional useful packages
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # Assets configuration (if you want to include sample images)
+  # assets:
+  #   - assets/images/
