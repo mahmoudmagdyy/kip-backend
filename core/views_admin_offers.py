@@ -356,59 +356,68 @@ def admin_delete_offer_image(request, offer_id):
             'error': str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def admin_create_offer_image(request):
-    """Create a new offer by uploading only an image (image-only creation)."""
+    """
+    Upload image only — create a minimal Offer with just the image.
+    Returns: offer_id and image URL.
+    """
     try:
+        # Ensure image exists
         if 'image' not in request.FILES:
-            return Response({
-                'error': 'No image file provided'
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "No image file provided"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        # Get the uploaded file
         uploaded_file = request.FILES['image']
-        
+
         # Generate unique filename
         file_extension = os.path.splitext(uploaded_file.name)[1]
         timestamp = int(time.time())
         unique_filename = f"offer_{timestamp}_{uuid.uuid4().hex[:8]}{file_extension}"
 
-        # Create offer with sensible defaults for required fields
+        # Ensure media/offers directory exists
+        offers_dir = os.path.join(settings.MEDIA_ROOT, 'offers')
+        os.makedirs(offers_dir, exist_ok=True)
+
+        # Save file to MEDIA_ROOT/offers/
+        file_path = os.path.join(offers_dir, unique_filename)
+        with open(file_path, 'wb+') as destination:
+            for chunk in uploaded_file.chunks():
+                destination.write(chunk)
+
+        # Create minimal Offer instance
         now = timezone.now()
-        offer = Offer(
-            title=(uploaded_file.name or 'Offer Image'),
-            description='',
-            discount_type='percentage',
+        offer = Offer.objects.create(
+            title=uploaded_file.name or "New Offer",
+            description="",
+            image=f"offers/{unique_filename}",
+            discount_type="percentage",
             discount_value=0,
             valid_from=now,
             valid_until=now + timezone.timedelta(days=365),
-            status='active',
+            status="active",
             is_featured=False,
-            created_by=request.user,
+            created_by=request.user
         )
 
-        # Save to media directory
-        media_dir = settings.MEDIA_ROOT
-        os.makedirs(media_dir, exist_ok=True)
-        
-        # Save file to media directory
-        file_path = os.path.join(media_dir, unique_filename)
-        with open(file_path, 'wb') as destination:
-            for chunk in uploaded_file.chunks():
-                destination.write(chunk)
-        
-        # Set media URL
-        offer.image_url = f'/media/{unique_filename}'
-        offer.save()
-        
-        # Return media URL
-        image_url = f'/media/{unique_filename}'
+        # Build full image URL
+        image_url = request.build_absolute_uri(
+            os.path.join(settings.MEDIA_URL, 'offers', unique_filename)
+        )
 
-        return Response({"image": image_url}, status=status.HTTP_201_CREATED)
+        return Response(
+            {
+                "offer_id": offer.id,
+                "image": image_url
+            },
+            status=status.HTTP_201_CREATED
+        )
 
     except Exception as e:
-        return Response({
-            'error': str(e)
-        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(
+            {"error": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
