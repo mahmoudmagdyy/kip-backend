@@ -37,3 +37,15 @@ def get_media_url(file_path):
         return f'/media/{file_path}'
     else:
         return f'/static/media/{file_path}'
+
+
+def get_server_media_url(request, file_path):
+    """
+    Get the full server URL for media files
+    """
+    if hasattr(settings, 'SERVER_DOMAIN') and hasattr(settings, 'SERVER_PROTOCOL'):
+        # Use server configuration for production
+        return f"{settings.SERVER_PROTOCOL}://{settings.SERVER_DOMAIN}{settings.MEDIA_URL}{file_path}"
+    else:
+        # Fallback to request.build_absolute_uri
+        return request.build_absolute_uri(f"{settings.MEDIA_URL}{file_path}")

@@ -250,6 +250,10 @@ CACHES = {
     }
 }
 
+# Server configuration for media URL generation
+SERVER_DOMAIN = '72.60.209.172:8010'
+SERVER_PROTOCOL = 'http'
+
 # Session configuration
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
