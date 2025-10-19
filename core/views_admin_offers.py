@@ -409,23 +409,22 @@ def admin_create_offer_image(request):
                 created_by=request.user
             )
         else:
-            # Local file storage (original method)
-            # Ensure media/offers directory exists
-            offers_dir = os.path.join(settings.MEDIA_ROOT, 'offers')
-            os.makedirs(offers_dir, exist_ok=True)
-
-            # Save file to MEDIA_ROOT/offers/
-            file_path = os.path.join(offers_dir, unique_filename)
+            # Use image proxy for Render compatibility
+            # Save to temp directory
+            temp_dir = os.path.join(settings.MEDIA_ROOT, 'temp')
+            os.makedirs(temp_dir, exist_ok=True)
+            
+            file_path = os.path.join(temp_dir, unique_filename)
             with open(file_path, 'wb+') as destination:
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
 
-            # Create minimal Offer instance
+            # Create minimal Offer instance with proxy URL
             now = timezone.now()
             offer = Offer.objects.create(
                 title=uploaded_file.name or "New Offer",
                 description="",
-                image=f"offers/{unique_filename}",
+                image=f"/api/image-proxy/{unique_filename}",  # Use proxy URL
                 discount_type="percentage",
                 discount_value=0,
                 valid_from=now,
@@ -435,10 +434,8 @@ def admin_create_offer_image(request):
                 created_by=request.user
             )
 
-            # Build full image URL
-            image_url = request.build_absolute_uri(
-                os.path.join(settings.MEDIA_URL, 'offers', unique_filename)
-            )
+            # Build full image URL using proxy
+            image_url = request.build_absolute_uri(f"/api/image-proxy/{unique_filename}")
 
         return Response(
             {
