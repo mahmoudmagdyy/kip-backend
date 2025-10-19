@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'channels',
+    'cloudinary_storage',
+    'cloudinary',
     'core'
 ]
 
@@ -185,10 +187,30 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# For production on Render, you should use cloud storage like AWS S3
-# The current configuration will work but files will be lost on redeployment
-# To use AWS S3, set USE_S3=true and configure the AWS credentials
-if os.environ.get('USE_S3', 'False').lower() == 'true':
+# Cloudinary configuration for production
+if os.environ.get('USE_CLOUDINARY', 'False').lower() == 'true':
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.api
+    
+    # Cloudinary configuration
+    cloudinary.config(
+        cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+        api_key=os.environ.get('CLOUDINARY_API_KEY'),
+        api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
+        secure=True
+    )
+    
+    # Use Cloudinary for media files
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    
+    # Keep static files with WhiteNoise
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    
+    # Cloudinary will handle media URLs automatically
+    MEDIA_URL = '/media/'
+    
+elif os.environ.get('USE_S3', 'False').lower() == 'true':
     # AWS S3 Configuration
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
