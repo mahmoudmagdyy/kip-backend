@@ -51,12 +51,8 @@ def offers(request):
             
             # Add image URL if available
             if offer.image:
-                # Check if it's already a full URL (Cloudinary)
-                if offer.image.startswith('http'):
-                    offer_data["image"] = offer.image
-                else:
-                    # Build absolute URL for local images
-                    offer_data["image"] = request.build_absolute_uri(offer.image.url)
+                # Image is now a URLField, so it's already a string
+                offer_data["image"] = offer.image
             
             offers_data.append(offer_data)
         

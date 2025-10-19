@@ -61,7 +61,7 @@ def admin_offers_list(request):
             if offer.image:
                 image_data.append({
                     "offer_id": offer.id,
-                    "image": request.build_absolute_uri(offer.image.url)
+                    "image": offer.image  # Image is now a URLField, so it's already a string
                 })
             else:
                 image_data.append({
