@@ -65,8 +65,14 @@ CORS_ALLOWED_ORIGINS = [
     "https://your-frontend-domain.com",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:8080",  # Flutter web default port
+    "http://127.0.0.1:8080",  # Flutter web default port
+    "http://localhost:5000",  # Alternative Flutter web port
+    "http://127.0.0.1:5000",  # Alternative Flutter web port
 ]
 
+# Allow all origins for development (be more restrictive in production)
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 # Security settings

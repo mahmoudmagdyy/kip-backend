@@ -60,12 +60,21 @@ def upload_image_proxy(request):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'OPTIONS'])
 @permission_classes([AllowAny])
 def serve_image_proxy(request, filename):
     """
     Serve image through proxy
     """
+    # Handle OPTIONS request for CORS preflight
+    if request.method == 'OPTIONS':
+        response = HttpResponse()
+        response['Access-Control-Allow-Origin'] = '*'
+        response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+        response['Access-Control-Max-Age'] = '3600'
+        return response
+    
     try:
         file_path = os.path.join(settings.MEDIA_ROOT, 'temp', filename)
         
@@ -88,7 +97,28 @@ def serve_image_proxy(request, filename):
             response = HttpResponse(f.read(), content_type=content_type)
             response['Content-Disposition'] = f'inline; filename="{filename}"'
             response['Cache-Control'] = 'public, max-age=3600'  # Cache for 1 hour
+            
+            # Add CORS headers for Flutter web compatibility
+            response['Access-Control-Allow-Origin'] = '*'
+            response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+            response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+            response['Access-Control-Max-Age'] = '3600'
+            
             return response
             
     except Exception as e:
         raise Http404("Image not found")
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def test_image_cors(request):
+    """
+    Test endpoint to check CORS headers
+    """
+    response = HttpResponse("CORS test successful")
+    response['Access-Control-Allow-Origin'] = '*'
+    response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+    response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response['Content-Type'] = 'text/plain'
+    return response

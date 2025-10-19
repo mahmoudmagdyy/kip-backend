@@ -95,6 +95,7 @@ urlpatterns = [
     # Image Proxy Endpoints
     path('image-upload/', image_proxy.upload_image_proxy, name="upload-image-proxy"),
     path('image-proxy/<str:filename>/', image_proxy.serve_image_proxy, name="serve-image-proxy"),
+    path('test-cors/', image_proxy.test_image_cors, name="test-image-cors"),
     
     # Test endpoints
     path('test/delete-all-offers/', admin_offers.test_delete_all_offers, name="test-delete-all-offers"),
