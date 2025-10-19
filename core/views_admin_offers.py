@@ -450,3 +450,28 @@ def admin_create_offer_image(request):
             {"error": str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def test_delete_all_offers(request):
+    """
+    TEST ENDPOINT: Delete all offers (for testing purposes)
+    """
+    try:
+        from .models import Offer
+        
+        # Delete all offers
+        deleted_count = Offer.objects.all().delete()[0]
+        
+        return Response({
+            'success': True,
+            'message': f'Deleted {deleted_count} offers',
+            'deleted_count': deleted_count
+        })
+        
+    except Exception as e:
+        return Response({
+            'success': False,
+            'error': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

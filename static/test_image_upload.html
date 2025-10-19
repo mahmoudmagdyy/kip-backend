@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Image Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .upload-area.dragover {
+            border-color: #007bff;
+            background-color: #f8f9fa;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .image-preview {
+            max-width: 300px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Image Upload</h1>
+    
+    <div class="upload-area" id="uploadArea">
+        <p>Drag and drop an image here, or click to select</p>
+        <input type="file" id="imageInput" accept="image/*">
+    </div>
+    
+    <button onclick="uploadImage()">Upload Image</button>
+    
+    <div id="result"></div>
+    
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const resultDiv = document.getElementById('result');
+        
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                imageInput.files = files;
+            }
+        });
+        
+        uploadArea.addEventListener('click', () => {
+            imageInput.click();
+        });
+        
+        async function uploadImage() {
+            const file = imageInput.files[0];
+            if (!file) {
+                showResult('Please select an image file.', 'error');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                showResult('Uploading...', 'info');
+                
+                const response = await fetch('/api/image-upload/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult(`
+                        <h3>Upload Successful!</h3>
+                        <p><strong>Image URL:</strong> <a href="${data.image_url}" target="_blank">${data.image_url}</a></p>
+                        <p><strong>Filename:</strong> ${data.filename}</p>
+                        <img src="${data.image_url}" alt="Uploaded Image" class="image-preview">
+                        <p><a href="${data.image_url}" target="_blank">Open Image in New Tab</a></p>
+                    `, 'success');
+                } else {
+                    showResult(`Upload failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showResult(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function showResult(message, type) {
+            resultDiv.innerHTML = message;
+            resultDiv.className = `result ${type}`;
+        }
+    </script>
+</body>
+</html>

@@ -73,8 +73,21 @@ def serve_image_proxy(request, filename):
             raise Http404("Image not found")
         
         with open(file_path, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='image/jpeg')
+            # Determine content type based on file extension
+            file_extension = os.path.splitext(filename)[1].lower()
+            content_type_map = {
+                '.jpg': 'image/jpeg',
+                '.jpeg': 'image/jpeg',
+                '.png': 'image/png',
+                '.gif': 'image/gif',
+                '.webp': 'image/webp',
+                '.bmp': 'image/bmp'
+            }
+            content_type = content_type_map.get(file_extension, 'image/jpeg')
+            
+            response = HttpResponse(f.read(), content_type=content_type)
             response['Content-Disposition'] = f'inline; filename="{filename}"'
+            response['Cache-Control'] = 'public, max-age=3600'  # Cache for 1 hour
             return response
             
     except Exception as e:

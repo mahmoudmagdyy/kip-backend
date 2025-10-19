@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/', include('core.urls')),
     path('dashboard/', TemplateView.as_view(template_name='admin_dashboard.html'), name='admin_dashboard'),
     path('test/', TemplateView.as_view(template_name='test_realtime.html'), name='test_realtime'),
+    path('test-image-upload/', TemplateView.as_view(template_name='test_image_upload.html'), name='test_image_upload'),
 ]
 
 # Serve static and media files
