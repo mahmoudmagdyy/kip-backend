@@ -50,12 +50,13 @@ def offers(request):
             }
             
             # Add image URL if available
-            if offer.image_url:
-                # Build absolute URL for the image
-                offer_data["image"] = request.build_absolute_uri(offer.image_url)
-            elif offer.image:
-                # Fallback to Django's image field
-                offer_data["image"] = request.build_absolute_uri(offer.image.url)
+            if offer.image:
+                # Check if it's already a full URL (Cloudinary)
+                if offer.image.startswith('http'):
+                    offer_data["image"] = offer.image
+                else:
+                    # Build absolute URL for local images
+                    offer_data["image"] = request.build_absolute_uri(offer.image.url)
             
             offers_data.append(offer_data)
         

@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'channels',
-    'cloudinary_storage',
     'cloudinary',
     'core'
 ]
@@ -201,14 +200,13 @@ if os.environ.get('USE_CLOUDINARY', 'False').lower() == 'true':
         secure=True
     )
     
-    # Use Cloudinary for media files
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    
     # Keep static files with WhiteNoise
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     
-    # Cloudinary will handle media URLs automatically
+    # For Cloudinary, we'll handle uploads manually in views
+    # Keep default Django file storage for now
     MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
     
 elif os.environ.get('USE_S3', 'False').lower() == 'true':
     # AWS S3 Configuration

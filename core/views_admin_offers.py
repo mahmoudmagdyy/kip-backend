@@ -378,35 +378,67 @@ def admin_create_offer_image(request):
         timestamp = int(time.time())
         unique_filename = f"offer_{timestamp}_{uuid.uuid4().hex[:8]}{file_extension}"
 
-        # Ensure media/offers directory exists
-        offers_dir = os.path.join(settings.MEDIA_ROOT, 'offers')
-        os.makedirs(offers_dir, exist_ok=True)
+        # Check if Cloudinary is enabled
+        if os.environ.get('USE_CLOUDINARY', 'False').lower() == 'true':
+            # Upload to Cloudinary
+            import cloudinary.uploader
+            
+            # Upload to Cloudinary
+            result = cloudinary.uploader.upload(
+                uploaded_file,
+                folder="offers",
+                public_id=unique_filename.replace(file_extension, ''),
+                resource_type="image"
+            )
+            
+            # Get Cloudinary URL
+            image_url = result['secure_url']
+            
+            # Create minimal Offer instance with Cloudinary URL
+            now = timezone.now()
+            offer = Offer.objects.create(
+                title=uploaded_file.name or "New Offer",
+                description="",
+                image=image_url,  # Store the full Cloudinary URL
+                discount_type="percentage",
+                discount_value=0,
+                valid_from=now,
+                valid_until=now + timezone.timedelta(days=365),
+                status="active",
+                is_featured=False,
+                created_by=request.user
+            )
+        else:
+            # Local file storage (original method)
+            # Ensure media/offers directory exists
+            offers_dir = os.path.join(settings.MEDIA_ROOT, 'offers')
+            os.makedirs(offers_dir, exist_ok=True)
 
-        # Save file to MEDIA_ROOT/offers/
-        file_path = os.path.join(offers_dir, unique_filename)
-        with open(file_path, 'wb+') as destination:
-            for chunk in uploaded_file.chunks():
-                destination.write(chunk)
+            # Save file to MEDIA_ROOT/offers/
+            file_path = os.path.join(offers_dir, unique_filename)
+            with open(file_path, 'wb+') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
 
-        # Create minimal Offer instance
-        now = timezone.now()
-        offer = Offer.objects.create(
-            title=uploaded_file.name or "New Offer",
-            description="",
-            image=f"offers/{unique_filename}",
-            discount_type="percentage",
-            discount_value=0,
-            valid_from=now,
-            valid_until=now + timezone.timedelta(days=365),
-            status="active",
-            is_featured=False,
-            created_by=request.user
-        )
+            # Create minimal Offer instance
+            now = timezone.now()
+            offer = Offer.objects.create(
+                title=uploaded_file.name or "New Offer",
+                description="",
+                image=f"offers/{unique_filename}",
+                discount_type="percentage",
+                discount_value=0,
+                valid_from=now,
+                valid_until=now + timezone.timedelta(days=365),
+                status="active",
+                is_featured=False,
+                created_by=request.user
+            )
 
-        # Build full image URL
-        image_url = request.build_absolute_uri(
-            os.path.join(settings.MEDIA_URL, 'offers', unique_filename)
-        )
+            # Build full image URL
+            image_url = request.build_absolute_uri(
+                os.path.join(settings.MEDIA_URL, 'offers', unique_filename)
+            )
 
         return Response(
             {
