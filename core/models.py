@@ -136,7 +136,7 @@ class Offer(models.Model):
     
     title = models.CharField(max_length=200)
     description = models.TextField()
-    image = models.ImageField(upload_to='offers/', null=True, blank=True, help_text="Offer image")
+    image = models.URLField(max_length=500, null=True, blank=True, help_text="Offer image URL")
     discount_type = models.CharField(max_length=20, choices=DISCOUNT_TYPE_CHOICES, default='percentage')
     discount_value = models.DecimalField(max_digits=10, decimal_places=2, help_text="Percentage (0-100) or fixed amount")
     valid_from = models.DateTimeField()

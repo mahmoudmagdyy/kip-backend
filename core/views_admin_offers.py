@@ -419,12 +419,15 @@ def admin_create_offer_image(request):
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
 
-            # Create minimal Offer instance with proxy URL
+            # Build full image URL using proxy
+            image_url = request.build_absolute_uri(f"/api/image-proxy/{unique_filename}")
+            
+            # Create minimal Offer instance with full proxy URL
             now = timezone.now()
             offer = Offer.objects.create(
                 title=uploaded_file.name or "New Offer",
                 description="",
-                image=f"/api/image-proxy/{unique_filename}",  # Use proxy URL
+                image=image_url,  # Store the full URL directly
                 discount_type="percentage",
                 discount_value=0,
                 valid_from=now,
@@ -433,9 +436,6 @@ def admin_create_offer_image(request):
                 is_featured=False,
                 created_by=request.user
             )
-
-            # Build full image URL using proxy
-            image_url = request.build_absolute_uri(f"/api/image-proxy/{unique_filename}")
 
         return Response(
             {
