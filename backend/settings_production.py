@@ -59,7 +59,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'backend.urls'
 
-# CORS settings for production
+# CORS settings for production - Allow all origins for Firebase and any domain
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# Additional CORS settings for maximum compatibility
 CORS_ALLOWED_ORIGINS = [
     "https://kip-backend.onrender.com",
     "https://your-frontend-domain.com",
@@ -69,11 +73,34 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",  # Flutter web default port
     "http://localhost:5000",  # Alternative Flutter web port
     "http://127.0.0.1:5000",  # Alternative Flutter web port
+    # Firebase hosting domains
+    "https://*.web.app",
+    "https://*.firebaseapp.com",
+    "https://*.googleusercontent.com",
+    # Add your specific Firebase project domains here
 ]
 
-# Allow all origins for development (be more restrictive in production)
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+# Allow all headers and methods
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 # Security settings
 SECURE_BROWSER_XSS_FILTER = True

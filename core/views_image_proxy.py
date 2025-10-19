@@ -70,9 +70,10 @@ def serve_image_proxy(request, filename):
     if request.method == 'OPTIONS':
         response = HttpResponse()
         response['Access-Control-Allow-Origin'] = '*'
-        response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-        response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-        response['Access-Control-Max-Age'] = '3600'
+        response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS, PATCH'
+        response['Access-Control-Allow-Headers'] = 'accept, accept-encoding, authorization, content-type, dnt, origin, user-agent, x-csrftoken, x-requested-with'
+        response['Access-Control-Max-Age'] = '86400'  # Cache for 24 hours
+        response['Access-Control-Allow-Credentials'] = 'true'
         return response
     
     try:
@@ -98,11 +99,12 @@ def serve_image_proxy(request, filename):
             response['Content-Disposition'] = f'inline; filename="{filename}"'
             response['Cache-Control'] = 'public, max-age=3600'  # Cache for 1 hour
             
-            # Add CORS headers for Flutter web compatibility
+            # Add CORS headers for maximum compatibility (Firebase, Flutter web, etc.)
             response['Access-Control-Allow-Origin'] = '*'
-            response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-            response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-            response['Access-Control-Max-Age'] = '3600'
+            response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS, PATCH'
+            response['Access-Control-Allow-Headers'] = 'accept, accept-encoding, authorization, content-type, dnt, origin, user-agent, x-csrftoken, x-requested-with'
+            response['Access-Control-Max-Age'] = '86400'  # Cache for 24 hours
+            response['Access-Control-Allow-Credentials'] = 'true'
             
             return response
             
@@ -110,15 +112,27 @@ def serve_image_proxy(request, filename):
         raise Http404("Image not found")
 
 
-@api_view(['GET'])
+@api_view(['GET', 'OPTIONS'])
 @permission_classes([AllowAny])
 def test_image_cors(request):
     """
     Test endpoint to check CORS headers
     """
-    response = HttpResponse("CORS test successful")
+    # Handle OPTIONS request for CORS preflight
+    if request.method == 'OPTIONS':
+        response = HttpResponse()
+        response['Access-Control-Allow-Origin'] = '*'
+        response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS, PATCH'
+        response['Access-Control-Allow-Headers'] = 'accept, accept-encoding, authorization, content-type, dnt, origin, user-agent, x-csrftoken, x-requested-with'
+        response['Access-Control-Max-Age'] = '86400'
+        response['Access-Control-Allow-Credentials'] = 'true'
+        return response
+    
+    response = HttpResponse("CORS test successful - Firebase and all domains allowed")
     response['Access-Control-Allow-Origin'] = '*'
-    response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-    response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS, PATCH'
+    response['Access-Control-Allow-Headers'] = 'accept, accept-encoding, authorization, content-type, dnt, origin, user-agent, x-csrftoken, x-requested-with'
+    response['Access-Control-Max-Age'] = '86400'
+    response['Access-Control-Allow-Credentials'] = 'true'
     response['Content-Type'] = 'text/plain'
     return response
