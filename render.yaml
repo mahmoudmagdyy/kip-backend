@@ -3,8 +3,8 @@ services:
     name: kip-backend
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt && python manage.py migrate --settings=backend.settings_production && python manage.py collectstatic --noinput --settings=backend.settings_production
-    startCommand: daphne -b 0.0.0.0 -p $PORT backend.asgi:application
+    buildCommand: pip install -r requirements_production_minimal.txt && python manage.py migrate --settings=backend.settings_production && python manage.py collectstatic --noinput --settings=backend.settings_production
+    startCommand: python start_production.py
     envVars:
       - key: DEBUG
         value: False

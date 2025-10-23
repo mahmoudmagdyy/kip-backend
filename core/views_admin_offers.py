@@ -419,8 +419,11 @@ def admin_create_offer_image(request):
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
 
-            # Build full image URL using proxy
-            image_url = request.build_absolute_uri(f"/api/image-proxy/{unique_filename}")
+            # Build full image URL using proxy with server configuration
+            if hasattr(settings, 'SERVER_DOMAIN') and hasattr(settings, 'SERVER_PROTOCOL'):
+                image_url = f"{settings.SERVER_PROTOCOL}://{settings.SERVER_DOMAIN}/api/image-proxy/{unique_filename}"
+            else:
+                image_url = request.build_absolute_uri(f"/api/image-proxy/{unique_filename}")
             
             # Create minimal Offer instance with full proxy URL
             now = timezone.now()

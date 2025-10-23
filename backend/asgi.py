@@ -3,7 +3,8 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+# Set production settings by default
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings_production')
 
 # Initialize Django ASGI application early to ensure the AppRegistry
 # is populated before importing code that may import ORM models.

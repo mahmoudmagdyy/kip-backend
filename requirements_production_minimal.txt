@@ -1,0 +1,31 @@
+# Minimal production requirements - only essential packages
+Django==5.2.7
+djangorestframework==3.15.2
+django-cors-headers==4.3.1
+django-filter==23.5
+djangorestframework-simplejwt==5.3.0
+
+# Database
+dj-database-url==2.1.0
+psycopg2-binary==2.9.9
+
+# WebSocket and Channels
+channels==4.0.0
+channels-redis==4.1.0
+redis==5.0.1
+
+# ASGI server
+daphne==4.0.0
+
+# Static files and media
+whitenoise==6.6.0
+Pillow==10.1.0
+
+# Production server
+gunicorn==21.2.0
+
+# Environment and configuration
+python-decouple==3.8
+
+# Additional utilities
+requests==2.31.0

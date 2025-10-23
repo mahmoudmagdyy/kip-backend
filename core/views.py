@@ -218,15 +218,20 @@ def delete_user(request, pk):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def services(request):
+    # Get the current server domain and protocol
+    server_domain = getattr(settings, 'SERVER_DOMAIN', 'localhost:8000')
+    server_protocol = getattr(settings, 'SERVER_PROTOCOL', 'http')
+    base_url = f"{server_protocol}://{server_domain}"
+    
     # Public services list: image and title only
     return Response({
         "services": [
-            {"id": 1, "title": "Cleaning", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.07%20PM.jpeg", "is_vib": True},
-            {"id": 2, "title": "Plumbing", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.06%20PM(1).jpeg", "is_vib": False},
-            {"id": 3, "title": "Electrical", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.06%20PM.jpeg", "is_vib": True},
-        {"id": 1, "title": "Cleaning", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.05%20PM.jpeg", "is_vib": True},
-            {"id": 2, "title": "Plumbing", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.05%20PM(1).jpeg", "is_vib": False},
-            {"id": 3, "title": "Electrical", "image": "http://72.60.209.172:9090/WhatsApp%20Image%202025-10-06%20at%203.05.04%20PM(2).jpeg", "is_vib": True}
+            {"id": 1, "title": "Cleaning", "image": f"{base_url}/media/WhatsApp%20Image%202025-10-06%20at%203.05.07%20PM.jpeg", "is_vib": True},
+            {"id": 2, "title": "Plumbing", "image": f"{base_url}/media/WhatsApp%20Image%202025-10-06%20at%203.05.06%20PM(1).jpeg", "is_vib": False},
+            {"id": 3, "title": "Electrical", "image": f"{base_url}/media/WhatsApp%20Image%202025-10-06%20at%203.05.06%20PM.jpeg", "is_vib": True},
+        {"id": 1, "title": "Cleaning", "image": f"{base_url}/media/WhatsApp%20Image%202025-10-06%20at%203.05.05%20PM.jpeg", "is_vib": True},
+            {"id": 2, "title": "Plumbing", "image": f"{base_url}/media/WhatsApp%20Image%202025-10-06%20at%203.05.05%20PM(1).jpeg", "is_vib": False},
+            {"id": 3, "title": "Electrical", "image": f"{base_url}/media/WhatsApp%20Image%202025-10-06%20at%203.05.04%20PM(2).jpeg", "is_vib": True}
         ]
     }, status=status.HTTP_200_OK)
 

@@ -26,6 +26,7 @@ ALLOWED_HOSTS = [
     '.herokuapp.com',  # Heroku domains
     '.vercel.app',  # Vercel domains
     '.railway.app',  # Railway domains
+    '*',  # Allow all hosts for debugging
 ]
 
 # Application definition
@@ -41,9 +42,15 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'channels',
-    'cloudinary',
     'core'
 ]
+
+# Add cloudinary only if available
+try:
+    import cloudinary
+    INSTALLED_APPS.append('cloudinary')
+except ImportError:
+    print("Cloudinary not available, skipping...")
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -221,25 +228,30 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Cloudinary configuration for production
 if os.environ.get('USE_CLOUDINARY', 'False').lower() == 'true':
-    import cloudinary
-    import cloudinary.uploader
-    import cloudinary.api
-    
-    # Cloudinary configuration
-    cloudinary.config(
-        cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-        api_key=os.environ.get('CLOUDINARY_API_KEY'),
-        api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
-        secure=True
-    )
-    
-    # Keep static files with WhiteNoise
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    
-    # For Cloudinary, we'll handle uploads manually in views
-    # Keep default Django file storage for now
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
+    try:
+        import cloudinary
+        import cloudinary.uploader
+        import cloudinary.api
+        
+        # Cloudinary configuration
+        cloudinary.config(
+            cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+            api_key=os.environ.get('CLOUDINARY_API_KEY'),
+            api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
+            secure=True
+        )
+        
+        # Keep static files with WhiteNoise
+        STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+        
+        # For Cloudinary, we'll handle uploads manually in views
+        # Keep default Django file storage for now
+        MEDIA_URL = '/media/'
+        MEDIA_ROOT = BASE_DIR / 'media'
+    except ImportError:
+        print("Cloudinary not available, using default file storage")
+        MEDIA_URL = '/media/'
+        MEDIA_ROOT = BASE_DIR / 'media'
     
 elif os.environ.get('USE_S3', 'False').lower() == 'true':
     # AWS S3 Configuration
@@ -321,8 +333,8 @@ CACHES = {
 }
 
 # Server configuration for media URL generation
-SERVER_DOMAIN = '72.60.209.172:8010'
-SERVER_PROTOCOL = 'http'
+SERVER_DOMAIN = 'mobile.shazmlc.cloud:8443'
+SERVER_PROTOCOL = 'https'
 
 # Session configuration
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'

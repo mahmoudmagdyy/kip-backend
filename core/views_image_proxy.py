@@ -43,9 +43,12 @@ def upload_image_proxy(request):
             for chunk in uploaded_file.chunks():
                 destination.write(chunk)
 
-        # Return proxy URL
-        proxy_url = f"/api/image-proxy/{unique_filename}"
-        full_url = request.build_absolute_uri(proxy_url)
+        # Return proxy URL using server configuration
+        if hasattr(settings, 'SERVER_DOMAIN') and hasattr(settings, 'SERVER_PROTOCOL'):
+            full_url = f"{settings.SERVER_PROTOCOL}://{settings.SERVER_DOMAIN}/api/image-proxy/{unique_filename}"
+        else:
+            proxy_url = f"/api/image-proxy/{unique_filename}"
+            full_url = request.build_absolute_uri(proxy_url)
 
         return Response({
             "success": True,
