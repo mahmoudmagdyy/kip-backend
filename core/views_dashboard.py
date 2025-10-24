@@ -104,8 +104,8 @@ def get_service(request, service_id):
 #         return Response({"success": False, "message": "Service not found"}, status=404)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])  # Add authentication
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
+@authentication_classes([])
 def update_service(request, service_id):
     try:
         service = Service.objects.get(id=service_id)
@@ -191,8 +191,8 @@ def update_service(request, service_id):
             "message": f"Update failed: {str(e)}"
         }, status=500)
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated])  # Add authentication
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
+@authentication_classes([])
 def delete_service(request, service_id):
     try:
         service = Service.objects.get(id=service_id)
