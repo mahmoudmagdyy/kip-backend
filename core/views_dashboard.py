@@ -84,6 +84,7 @@ def update_service(request, service_id):
         serializer = ServiceCreateSerializer(service, data=service_data, partial=True)
         if serializer.is_valid():
             service = serializer.save()
+            
             return Response({"success": True, "message": "Service updated successfully",
                              "data": ServiceSerializer(service, context={'request': request}).data})
         return Response({"success": False, "message": "Invalid data", "errors": serializer.errors}, status=400)

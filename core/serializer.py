@@ -168,11 +168,6 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_sub_services(self, obj):
         subs = obj.sub_services.filter(is_active=True).order_by('order', 'id')
         return SubServiceSerializer(subs, many=True, context=self.context).data
-
-class ServiceCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Service
-        fields = ['title_ar', 'title_en', 'description_ar', 'description_en', 'icon', 'is_active', 'order']
 class OfferSerializer(serializers.ModelSerializer):
     created_by_name = serializers.SerializerMethodField()
     is_valid = serializers.SerializerMethodField()
