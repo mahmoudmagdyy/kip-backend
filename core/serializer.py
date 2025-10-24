@@ -141,12 +141,6 @@ class SubServiceSerializer(serializers.ModelSerializer):
             return get_server_media_url(request, obj.icon)
         return None
 
-class SubServiceCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubService
-        fields = ['service', 'title_ar', 'title_en', 'description_ar', 'description_en',
-                  'icon', 'is_vib', 'is_active', 'order']
-
 # ---------------- Service ----------------
 class ServiceSerializer(serializers.ModelSerializer):
     sub_services = serializers.SerializerMethodField()
