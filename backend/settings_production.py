@@ -333,7 +333,7 @@ CACHES = {
 }
 
 # Server configuration for media URL generation
-SERVER_DOMAIN = 'https://kip-backend.onrender.com'
+SERVER_DOMAIN = 'kip-backend.onrender.com'
 SERVER_PROTOCOL = 'https'
 
 # Session configuration
