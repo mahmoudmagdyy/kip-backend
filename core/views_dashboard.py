@@ -97,13 +97,13 @@ def update_service(request, service_id):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def delete_service(request, service_id):
-     return Response({"success": True, "message": "this is a delete request test finish",})
-    # try:
-    #     service = Service.objects.get(id=service_id)
-    #     service.delete()
-    #     return Response({"success": True, "message": "Service deleted successfully"})
-    # except Service.DoesNotExist:
-    #     return Response({"success": False, "message": "Service not found"}, status=404)
+    #  return Response({"success": True, "message": "this is a delete request test finish",})
+    try:
+        service = Service.objects.get(id=service_id)
+        service.delete()
+        return Response({"success": True, "message": "Service deleted successfully"})
+    except Service.DoesNotExist:
+        return Response({"success": False, "message": "Service not found"}, status=404)
 
 
 
