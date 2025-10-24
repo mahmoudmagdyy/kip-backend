@@ -62,7 +62,7 @@ def get_service(request, service_id):
         return Response({"success": False, "message": "Service not found"}, status=404)
 
 
-@api_view(['PUT'])
+@api_view(['POST'])
 @permission_classes([AllowAny])
 @authentication_classes([])
 def update_service(request, service_id):
