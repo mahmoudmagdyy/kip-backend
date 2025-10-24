@@ -66,43 +66,44 @@ def get_service(request, service_id):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def update_service(request, service_id):
-    return Response({"success": True, "message": "this is a post request test",})
-    # try:
-    #     service = Service.objects.get(id=service_id)
-    #     uploaded_file = request.FILES.get('image') or request.FILES.get('icon')
-    #     service_data = request.data.copy()
+    # return Response({"success": True, "message": "this is a post request test",})
+    try:
+        service = Service.objects.get(id=service_id)
+        uploaded_file = request.FILES.get('image') or request.FILES.get('icon')
+        service_data = request.data.copy()
 
-    #     if uploaded_file:
-    #         ext = os.path.splitext(uploaded_file.name)[1]
-    #         filename = f"service_{service_id}_{int(time.time())}_{uuid.uuid4().hex[:8]}{ext}"
-    #         os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
-    #         path = os.path.join(settings.MEDIA_ROOT, filename)
-    #         with open(path, 'wb') as f:
-    #             for chunk in uploaded_file.chunks():
-    #                 f.write(chunk)
-    #         service_data['icon'] = get_server_media_url(request, filename)
+        if uploaded_file:
+            ext = os.path.splitext(uploaded_file.name)[1]
+            filename = f"service_{service_id}_{int(time.time())}_{uuid.uuid4().hex[:8]}{ext}"
+            os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
+            path = os.path.join(settings.MEDIA_ROOT, filename)
+            with open(path, 'wb') as f:
+                for chunk in uploaded_file.chunks():
+                    f.write(chunk)
+            service_data['icon'] = get_server_media_url(request, filename)
 
-    #     serializer = ServiceCreateSerializer(service, data=service_data, partial=True)
-    #     if serializer.is_valid():
-    #         service = serializer.save()
+        serializer = ServiceCreateSerializer(service, data=service_data, partial=True)
+        if serializer.is_valid():
+            service = serializer.save()
             
-    #         return Response({"success": True, "message": "Service updated successfully",
-    #                          "data": ServiceSerializer(service, context={'request': request}).data})
-    #     return Response({"success": False, "message": "Invalid data", "errors": serializer.errors}, status=400)
-    # except Service.DoesNotExist:
-    #     return Response({"success": False, "message": "Service not found"}, status=404)
+            return Response({"success": True, "message": "Service updated successfully",
+                             "data": ServiceSerializer(service, context={'request': request}).data})
+        return Response({"success": False, "message": "Invalid data", "errors": serializer.errors}, status=400)
+    except Service.DoesNotExist:
+        return Response({"success": False, "message": "Service not found"}, status=404)
 
 
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
 @authentication_classes([])
 def delete_service(request, service_id):
-    try:
-        service = Service.objects.get(id=service_id)
-        service.delete()
-        return Response({"success": True, "message": "Service deleted successfully"})
-    except Service.DoesNotExist:
-        return Response({"success": False, "message": "Service not found"}, status=404)
+     return Response({"success": True, "message": "this is a delete request test finish",})
+    # try:
+    #     service = Service.objects.get(id=service_id)
+    #     service.delete()
+    #     return Response({"success": True, "message": "Service deleted successfully"})
+    # except Service.DoesNotExist:
+    #     return Response({"success": False, "message": "Service not found"}, status=404)
 
 
 
